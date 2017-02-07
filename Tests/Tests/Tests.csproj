@@ -34,8 +34,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="old\RandomHelper.cs" />
-    <Compile Include="old\TestArrays.cs" />
+    <Compile Include="RandomHelper.cs" />
+    <Compile Include="Tests\TestArrays.cs" />
     <Compile Include="old\TestFloat.cs" />
     <Compile Include="old\TestInt.cs" />
     <Compile Include="old\TestSimdPrepared.cs" />
@@ -43,7 +43,7 @@
     <Compile Include="old\Vec4FVal.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReadonlyStructTest.cs" />
+    <Compile Include="Tests\ReadonlyStructTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
