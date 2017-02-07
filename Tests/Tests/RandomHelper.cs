@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Numerics;
 
-namespace SimdTest
+namespace Tests
 {
     class RandomHelper
     {

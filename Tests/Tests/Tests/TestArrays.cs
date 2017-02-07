@@ -1,8 +1,8 @@
 ﻿using BenchmarkDotNet.Attributes;
 
-namespace SimdTest
+namespace Tests.Tests
 {
-	public class TestArrays
+	public class TestArraysBoundsCheck
 	{
         private int count;
         float[] a;
@@ -10,7 +10,7 @@ namespace SimdTest
         float[] res1;
         float[] res2;
 
-        public TestArrays()
+        public TestArraysBoundsCheck()
         {
             count = 100000000;
             a = RandomHelper.GetNumbers(count);
