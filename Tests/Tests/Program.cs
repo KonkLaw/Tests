@@ -11,6 +11,9 @@ namespace Tests
             // ReadonlyStructRun();
             // RunArrays();
 
+
+            
+
             if (CheckEnviroment2())
             {
                 CheckEnviroment();
