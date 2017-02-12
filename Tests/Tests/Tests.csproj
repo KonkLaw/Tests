@@ -34,6 +34,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="old\ArglistTest.cs" />
     <Compile Include="RandomHelper.cs" />
     <Compile Include="Tests\TestArrays.cs" />
     <Compile Include="old\TestFloat.cs" />
