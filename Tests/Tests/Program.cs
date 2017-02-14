@@ -1,16 +1,63 @@
-﻿using BenchmarkDotNet.Running;
+﻿using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Running;
 using System;
 using Tests.Tests;
 
 namespace Tests
 {
-    class Program
+	public class Test222
+	{
+		private int count;
+		public float[] a;
+		public float[] b;
+		public float[] res1;
+		public float[] res2;
+
+		public Test222()
+		{
+			count = 100000000;
+			a = RandomHelper.GetNumbers(count);
+			b = RandomHelper.GetNumbers(count);
+			res1 = new float[count];
+			res2 = new float[count];
+		}
+
+		[Benchmark]
+		public float[] Sum_slow()
+		{
+			for (int i = 0; i < count; i++)
+			{
+				res1[i] = a[i] + b[i];
+			}
+			return res1;
+		}
+
+		[Benchmark]
+		public void Sum_fast()
+		{
+			for (int i = 0; i < count; i++)
+			{
+				res1[i] = a[i] + b[i];
+			}
+		}
+	}
+
+	class Program
     {
-        static void Main(string[] args)
+		
+
+		static void Main(string[] args)
         {
+			// TODO: uncoment necessary test.
 			// ReadonlyStructRun();
 			// RunArrays();
 
+			new Test222().Sum_fast();
+			//BenchmarkRunner.Run<Test222>();
+
+
+
+			// TODO: add cast test
 			if (CheckEnviroment2())
             {
                 CheckEnviroment();
