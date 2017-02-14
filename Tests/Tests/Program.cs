@@ -8,49 +8,49 @@ namespace Tests
     {
         static void Main(string[] args)
         {
-            // ReadonlyStructRun();
-            // RunArrays();
+			// ReadonlyStructRun();
+			// RunArrays();
 
-
-            
-
-            if (CheckEnviroment2())
+			if (CheckEnviroment2())
             {
                 CheckEnviroment();
-                //BenchmarkRunner.Run<TestArrays>();
+				//BenchmarkRunner.Run<TestArrays>();
 
-                //Stopwatch s = new Stopwatch();
+				//Stopwatch s = new Stopwatch();
 
-                //var t1 = new TestArrays().Sum_fast();
-                //GC.Collect();
-                //GC.WaitForPendingFinalizers();
+				//var t1 = new TestArrays().Sum_fast();
+				//GC.Collect();
+				//GC.WaitForPendingFinalizers();
 
-                //s.Restart();
+				//s.Restart();
 
-                //t1 = new TestArrays().Sum_fast();
+				//t1 = new TestArrays().Sum_fast();
 
-                //s.Stop();
-                //Console.WriteLine(s.ElapsedMilliseconds);
+				//s.Stop();
+				//Console.WriteLine(s.ElapsedMilliseconds);
 
-                //var t2 = new TestArrays().Sum_slow();
-                //GC.Collect();
-                //GC.WaitForPendingFinalizers();
-                //s.Restart();
+				// check wtf
+				// IComparable.Equals(1, new object());
 
-                //t2 = new TestArrays().Sum_slow();
+				//var t2 = new TestArrays().Sum_slow();
+				//GC.Collect();
+				//GC.WaitForPendingFinalizers();
+				//s.Restart();
 
-                //s.Stop();
-                //Console.WriteLine(s.ElapsedMilliseconds);
+				//t2 = new TestArrays().Sum_slow();
 
-                //Console.WriteLine(t1.Length + t2.Length);
+				//s.Stop();
+				//Console.WriteLine(s.ElapsedMilliseconds);
+
+				//Console.WriteLine(t1.Length + t2.Length);
 
 
-                //TestArrays.Run();
-                //TestInt.Run();
-                //TestFloat.Run();
-                //TestSimdPrepared.Run();
-            }
-            Console.WriteLine("End of test.");
+				//TestArrays.Run();
+				//TestInt.Run();
+				//TestFloat.Run();
+				//TestSimdPrepared.Run();
+			}
+			Console.WriteLine("End of test.");
             Console.ReadLine();
         }
 
