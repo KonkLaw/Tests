@@ -1,25 +1,24 @@
 ﻿using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Running;
 using System;
 using Tests.Tests;
 
 namespace Tests
 {
-	public class Test222
+	public class TestWithIssue
 	{
 		private int count;
 		public float[] a;
 		public float[] b;
 		public float[] res1;
-		public float[] res2;
 
-		public Test222()
+		public TestWithIssue()
 		{
 			count = 100000000;
 			a = RandomHelper.GetNumbers(count);
 			b = RandomHelper.GetNumbers(count);
 			res1 = new float[count];
-			res2 = new float[count];
 		}
 
 		[Benchmark]
@@ -48,14 +47,11 @@ namespace Tests
 
 		static void Main(string[] args)
         {
+			BenchmarkRunner.Run<TestWithIssue>();
+
 			// TODO: uncoment necessary test.
 			// ReadonlyStructRun();
 			// RunArrays();
-
-			new Test222().Sum_fast();
-			//BenchmarkRunner.Run<Test222>();
-
-
 
 			// TODO: add cast test
 			if (CheckEnviroment2())
