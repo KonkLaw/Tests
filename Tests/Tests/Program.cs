@@ -10,12 +10,13 @@ namespace Tests
 	{
 		static void Main(string[] args)
 		{
-			CheckEnviroment();
 
+			//CheckEnviroment();
 			// TODO: uncoment necessary test.
 			//RunArraysTest();
 			//ReadonlyStructRun();
-			RunSimdTest();
+			//RunSimdTest();
+			BenchmarkRunner.Run<IntSumTest>();
 
 			Console.WriteLine("End of test.");
 			Console.WriteLine("Press any key.");
@@ -38,7 +39,7 @@ namespace Tests
 
 		private static void RunArraysTest()
 		{
-			BenchmarkRunner.Run<TestArraysBoundsCheck>();
+			BenchmarkRunner.Run<ArraysBoundsCheckTest>();
 			//BenchmarkDotNet = v0.10.1, OS = Microsoft Windows NT 6.1.7601 Service Pack 1
 			//Processor = Intel(R) Core(TM) i5 - 3210M CPU 2.50GHz, ProcessorCount = 4
 			//Frequency = 2435957 Hz, Resolution = 410.5163 ns, Timer = TSC
@@ -52,7 +53,7 @@ namespace Tests
 
 		private static void RunSimdTest()
 		{
-			BenchmarkRunner.Run<VectorSumTest>();
+			BenchmarkRunner.Run<FloatSummTest>();
 		}
 
 		private static void CheckEnviroment()

@@ -36,10 +36,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Log.cs" />
-    <Compile Include="old\ArglistTest.cs" />
+    <Compile Include="Draft\ArglistTest.cs" />
     <Compile Include="RandomHelper.cs" />
-    <Compile Include="Tests\TestArrays.cs" />
-    <Compile Include="old\TestInt.cs" />
+    <Compile Include="Tests\ArraysBoundsCheckTest.cs" />
+    <Compile Include="Tests\IntSumTest.cs" />
     <Compile Include="Tests\Vectors.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
