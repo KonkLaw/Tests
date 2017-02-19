@@ -1,10 +1,9 @@
 ﻿using BenchmarkDotNet.Attributes;
-using System;
 using System.Numerics;
 
 namespace Tests.Tests
 {
-	public class VectorSumTest
+	public class FloatSummTest
 	{
 		Vector4[] arrSimdA;
 		Vector4[] arrSimdB;
@@ -18,22 +17,21 @@ namespace Tests.Tests
 		float[] arrB;
 		float[] arrRes;
 
-		public VectorSumTest()
+		public FloatSummTest()
 		{
-			const int vectroCount = 10000000;
-			//const int vectroCount = 10;
+			const int vectorsCount = 10000000;
 
-			arrSimdA = GetSimdVectros(vectroCount);
-			arrSimdB = GetSimdVectros(vectroCount);
-			arrSimdRes = new Vector4[vectroCount];
+			arrSimdA = GetSimdVectros(vectorsCount);
+			arrSimdB = GetSimdVectros(vectorsCount);
+			arrSimdRes = new Vector4[vectorsCount];
 
-			arrValA = GetValueTypeVectros(vectroCount);
-			arrValB = GetValueTypeVectros(vectroCount);
-			arrValRes = new Vector4FVal[vectroCount];
+			arrValA = GetValueTypeVectros(vectorsCount);
+			arrValB = GetValueTypeVectros(vectorsCount);
+			arrValRes = new Vector4FVal[vectorsCount];
 
-			arrA = RandomHelper.GetNumbers(vectroCount * 4);
-			arrB = RandomHelper.GetNumbers(vectroCount * 4);
-			arrRes = new float [vectroCount * 4];
+			arrA = RandomHelper.GetFloatNumbers(vectorsCount * 4);
+			arrB = RandomHelper.GetFloatNumbers(vectorsCount * 4);
+			arrRes = new float [vectorsCount * 4];
 
 			//Vector4FRef[] vecar = GetRefVectros(vectroCount);
 			//Vector4FRef[] vecbr = GetRefVectros(vectroCount);
@@ -42,7 +40,7 @@ namespace Tests.Tests
 
 		private static Vector4[] GetSimdVectros(int vectroCount)
 		{
-			float[] floats = RandomHelper.GetNumbers(vectroCount * 4);
+			float[] floats = RandomHelper.GetFloatNumbers(vectroCount * 4);
 			var res = new Vector4[vectroCount];
 			for (int i = 0; i < floats.Length; i += 4)
 			{
@@ -53,7 +51,7 @@ namespace Tests.Tests
 
 		private static Vector4FVal[] GetValueTypeVectros(int vectroCount)
 		{
-			float[] floats = RandomHelper.GetNumbers(vectroCount * 4);
+			float[] floats = RandomHelper.GetFloatNumbers(vectroCount * 4);
 			var res = new Vector4FVal[vectroCount];
 			for (int i = 0; i < floats.Length; i += 4)
 			{
@@ -64,7 +62,7 @@ namespace Tests.Tests
 
 		private static Vector4FRef[] GetRefVectros(int vectroCount)
 		{
-			float[] floats = RandomHelper.GetNumbers(vectroCount * 4);
+			float[] floats = RandomHelper.GetFloatNumbers(vectroCount * 4);
 			var res = new Vector4FRef[vectroCount];
 			for (int i = 0; i < floats.Length; i += 4)
 			{
@@ -74,7 +72,7 @@ namespace Tests.Tests
 		}
 
 		[Benchmark]
-		public float[] SimdArraysTest()
+		public float[] ArraysSumWithSimd()
 		{
 			int numsOnVectorCount = Vector<float>.Count;
 			float[] _arrA = arrA;
@@ -92,7 +90,7 @@ namespace Tests.Tests
 		}
 
 		[Benchmark]
-		public Vector4[] SimdVectorsTest()
+		public Vector4[] VectorsSumWithSimd()
 		{
 			Vector4[] _arrSimdA = arrSimdA;
 			Vector4[] _arrSimdB = arrSimdB;
@@ -105,7 +103,7 @@ namespace Tests.Tests
 		}
 
 		[Benchmark]
-		public Vector4FVal[] ValueTypeVectorTest()
+		public Vector4FVal[] VectorsValueTypeSum()
 		{
 			Vector4FVal[] _arrValA = arrValA;
 			Vector4FVal[] _arrValB = arrValB;

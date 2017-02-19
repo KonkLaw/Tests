@@ -2,7 +2,7 @@
 
 namespace Tests.Tests
 {
-	public class TestArraysBoundsCheck
+	public class ArraysBoundsCheckTest
 	{
 		private int count;
 		float[] a;
@@ -10,11 +10,11 @@ namespace Tests.Tests
 		float[] resultFixedCountRun;
 		float[] resultOptimizedRun;
 
-		public TestArraysBoundsCheck()
+		public ArraysBoundsCheckTest()
 		{
 			count = 100000000;
-			a = RandomHelper.GetNumbers(count);
-			b = RandomHelper.GetNumbers(count);
+			a = RandomHelper.GetFloatNumbers(count);
+			b = RandomHelper.GetFloatNumbers(count);
 			resultFixedCountRun = new float[count];
 			resultOptimizedRun = new float[count];
 		}
@@ -32,7 +32,7 @@ namespace Tests.Tests
 		[Benchmark]
 		public float[] Sum_fast()
 		{
-			// This caching is REALLY important.
+			// In this  case caching is REALLY important.
 			float[] a_ = a;
 			float[] b_ = b;
 			float[] res2_ = resultOptimizedRun;

@@ -6,14 +6,24 @@ namespace Tests
     {
         private static Random random = new Random(DateTime.Now.Millisecond);
 
-        public static float[] GetNumbers(int numbersCount)
+        public static float[] GetFloatNumbers(int numbersCount)
         {
-            float[] res = new float[numbersCount];
-            for (int i = 0; i < res.Length; i++)
+            float[] result = new float[numbersCount];
+            for (int i = 0; i < result.Length; i++)
             {
-                res[i] = random.Next() / (1.0f / int.MaxValue);
+                result[i] = random.Next() / (1.0f / int.MaxValue);
             }
-            return res;
+            return result;
         }
+
+		public static int[] GetIntNumbers(int numbersCount)
+		{
+			int[] result = new int[numbersCount];
+			for (int i = 0; i < result.Length; i++)
+			{
+				result[i] = random.Next();
+			}
+			return result;
+		}
     }
 }
