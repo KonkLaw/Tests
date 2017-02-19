@@ -1,15 +1,64 @@
-﻿using BenchmarkDotNet.Running;
+﻿using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Running;
 using System;
 using System.Diagnostics;
 using System.Numerics;
+using System.Security.Cryptography;
 using Tests.Tests;
 
 namespace Tests
 {
+
+	public class BuggyTest
+	{
+		private const int N = 10000;
+		private readonly byte[] data;
+		private readonly byte[] data2;
+
+		private readonly SHA256 sha256 = SHA256.Create();
+		private readonly MD5 md5 = MD5.Create();
+
+		public BuggyTest()
+		{
+			data = new byte[N];
+			new Random(42).NextBytes(data);
+
+			data2 = new byte[N];
+			new Random(42).NextBytes(data2);
+		}
+
+		[Benchmark]
+		public byte[] Sha256()
+		{
+			return sha256.ComputeHash(data);
+		}
+
+		[Benchmark]
+		public byte[] Md5()
+		{
+			return md5.ComputeHash(data);
+		}
+
+		[Benchmark]
+		public byte[] Sha256__()
+		{
+			return sha256.ComputeHash(data2);
+		}
+
+		[Benchmark]
+		public byte[] Md5__()
+		{
+			return md5.ComputeHash(data2);
+		}
+	}
+
 	class Program
 	{
 		static void Main(string[] args)
 		{
+			BenchmarkRunner.Run<BuggyTest>();
+			return;
+
 
 			//CheckEnviroment();
 			// TODO: uncoment necessary test.
