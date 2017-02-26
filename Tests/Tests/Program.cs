@@ -39,12 +39,14 @@ namespace Tests
 			return md5.ComputeHash(data);
 		}
 
+		//[Benchmark]
 		[Benchmark]
 		public byte[] Sha256__()
 		{
 			return sha256.ComputeHash(data2);
 		}
 
+		//[Benchmark]
 		[Benchmark]
 		public byte[] Md5__()
 		{
@@ -56,16 +58,15 @@ namespace Tests
 	{
 		static void Main(string[] args)
 		{
-			BenchmarkRunner.Run<BuggyTest>();
-			return;
+			//BenchmarkRunner.Run<BuggyTest>();
+			//return;
 
-
-			//CheckEnviroment();
+			CheckEnviroment();
 			// TODO: uncoment necessary test.
 			//RunArraysTest();
-			//ReadonlyStructRun();
+			ReadonlyStructRun();
 			//RunSimdTest();
-			BenchmarkRunner.Run<IntSumTest>();
+			//BenchmarkRunner.Run<IntSumTest>();
 
 			Console.WriteLine("End of test.");
 			Console.WriteLine("Press any key.");
