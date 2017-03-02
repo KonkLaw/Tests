@@ -25,5 +25,15 @@ namespace Tests
 			}
 			return result;
 		}
-    }
+
+		public static int[] GetIntNumbers(int numbersCount, int minValue, int maxValue)
+		{
+			int[] result = new int[numbersCount];
+			for (int i = 0; i < result.Length; i++)
+			{
+				result[i] = random.Next(minValue, maxValue);
+			}
+			return result;
+		}
+	}
 }
