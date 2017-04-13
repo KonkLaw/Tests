@@ -21,7 +21,8 @@ namespace Tests
 			//CheckEnviroment();
 			// TODO: uncoment necessary test.
 			//RunArraysTest();
-			RunComparationTest();
+			//RunComparationTest();
+			RunLazyTest();
 			//ReadonlyStructRun();
 			//RunSimdTest();
 			//BenchmarkRunner.Run<IntSumTest>();
@@ -29,6 +30,11 @@ namespace Tests
 			Console.WriteLine("End of test.");
 			Console.WriteLine("Press any key for exit.");
 			Console.ReadLine();
+		}
+
+		private static void RunLazyTest()
+		{
+			BenchmarkRunner.Run<LazyTest>();
 		}
 
 		private static void RunComparationTest()
