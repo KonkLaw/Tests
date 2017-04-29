@@ -4,6 +4,8 @@ using System;
 using System.Diagnostics;
 using System.Numerics;
 using System.Security.Cryptography;
+using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Jobs;
 using Tests.Tests;
 
 namespace Tests
@@ -20,6 +22,7 @@ namespace Tests
 
 			//CheckEnviroment();
 			// TODO: uncoment necessary test.
+			//RunStructInitTest();
 			//RunArraysTest();
 			//RunComparationTest();
 			RunLazyTest();
@@ -32,9 +35,16 @@ namespace Tests
 			Console.ReadLine();
 		}
 
+		private static void RunStructInitTest()
+		{
+			BenchmarkRunner.Run<StructInitTest>();
+		}
+
 		private static void RunLazyTest()
 		{
-			BenchmarkRunner.Run<LazyTest>();
+			BenchmarkRunner.Run<LazyTest>(
+				ManualConfig.Create(DefaultConfig.Instance).With(new Job(new RunMode
+					{ InvocationCount = 2 * 8096 })));
 		}
 
 		private static void RunComparationTest()

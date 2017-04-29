@@ -45,6 +45,7 @@
     <Compile Include="Tests\ComparationTest.cs" />
     <Compile Include="Tests\IntSumTest.cs" />
     <Compile Include="Tests\LazyTest.cs" />
+    <Compile Include="Tests\StructInitTest.cs" />
     <Compile Include="Tests\Vectors.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,16 +1,4 @@
-﻿//  ----------------------------------------------------------------------------------------
-//   Module name: LazyTest.cs
-//  
-//   Author:      Artyom Polishchuk
-//  
-//   Created at:  13-04-2017
-//  
-//   Description: 
-//  
-//  ----------------------------------------------------------------------------------------
-
-using System;
-using BenchmarkDotNet.Running;
+﻿using System;
 using BenchmarkDotNet.Attributes;
 
 namespace Tests.Tests
@@ -46,7 +34,6 @@ namespace Tests.Tests
 	{
 		private bool inited;
 		private Func<T> creator;
-		private Func<T> getter;
 		private T value;
 
 		public T Value
@@ -71,28 +58,21 @@ namespace Tests.Tests
 				throw new ArgumentNullException(nameof(creator));
 			inited = false;
 			this.creator = creator;
-			getter = FirstCreator;
 		}
-
-		private T FirstCreator()
-		{
-			value = creator();
-			creator = null;
-			getter = DirectValueGetter;
-			return value;
-		}
-
-		private T DirectValueGetter() => value;
 	}
 
 	public class LazyTest
 	{
+		private int directIndex = -1;
+		private int condIndex = -1;
+
 		private LazyDirect<int>[] lazy1;
 		private LazyCond<int>[] lazy2;
 
-		private const int CountTest = 10000;
+		private const int CountTest = 2000000;
 
-		public LazyTest()
+		[Setup]
+		public void Setup()
 		{
 			lazy1 = new LazyDirect<int>[CountTest];
 			lazy2 = new LazyCond<int>[CountTest];
@@ -104,38 +84,32 @@ namespace Tests.Tests
 
 			for (int i = 0; i < CountTest; i++)
 			{
-				bool shouldPreinit = true;//i % 2 == 1;
-				
-				if (shouldPreinit)
+				if (RandomHelper.GetRandomBool())
 				{
 					var t1 = lazy1[i].Value;
 					var t2 = lazy2[i].Value;
 				}
 			}
+			directIndex = 0;
+			condIndex = 0;
 		}
 
 		[Benchmark]
-		public int RunWithDirectLazy()
+		public unsafe int RunWithDirectLazy()
 		{
-			int sum = 0;
 			LazyDirect<int>[] _arr = lazy1;
-			for (int i = 0; i < _arr.Length; i++)
-			{
-				sum += _arr[i].Value;
-			}
-			return sum;
+			directIndex += 2;
+			int index = directIndex;
+			return _arr[index - 2].Value + _arr[index - 1].Value;
 		}
 
 		[Benchmark]
 		public int RunWithCondLazy()
 		{
-			int sum = 0;
 			LazyCond<int>[] _arr = lazy2;
-			for (int i = 0; i < _arr.Length; i++)
-			{
-				sum += _arr[i].Value;
-			}
-			return sum;
+			condIndex += 2;
+			int index = condIndex;
+			return _arr[index - 2].Value + _arr[index - 1].Value;
 		}
 
 		public void Run()
