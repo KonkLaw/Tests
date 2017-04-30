@@ -37,6 +37,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Tests\BoolToIntConversionTest.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Draft\ArglistTest.cs" />
     <Compile Include="RandomHelper.cs" />

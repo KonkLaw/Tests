@@ -1,9 +1,7 @@
-﻿using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Running;
+﻿using BenchmarkDotNet.Running;
 using System;
 using System.Diagnostics;
 using System.Numerics;
-using System.Security.Cryptography;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Jobs;
 using Tests.Tests;
@@ -14,25 +12,39 @@ namespace Tests
 	{
 		static void Main(string[] args)
 		{
-			// TODO: buggy test.
-			//BenchmarkRunner.Run<BuggyTest>();
-			//return;
-
 			ApproveReleaseWithoutDebugerStart();
 
 			//CheckEnviroment();
 			// TODO: uncoment necessary test.
+
+			//RunIntSumTest();
+			//BoolToIntConvertion();
 			//RunStructInitTest();
+			//RunSimdTest();
+
+			// MEASURMENT SAVED:
+			//RunLazyTest();
 			//RunArraysTest();
 			//RunComparationTest();
-			RunLazyTest();
 			//ReadonlyStructRun();
-			//RunSimdTest();
-			//BenchmarkRunner.Run<IntSumTest>();
 
 			Console.WriteLine("End of test.");
 			Console.WriteLine("Press any key for exit.");
 			Console.ReadLine();
+		}
+
+		private static void RunIntSumTest()
+		{
+			BenchmarkRunner.Run<IntSumTest>();
+		}
+
+		private static void BoolToIntConvertion()
+		{
+			//new BoolToIntConversionTest().Test1();
+			//new BoolToIntConversionTest().Test2();
+			//Console.WriteLine(new BoolToIntConversionTest().Test3());
+			//return;
+			BenchmarkRunner.Run<BoolToIntConversionTest>();
 		}
 
 		private static void RunStructInitTest()
@@ -40,11 +52,44 @@ namespace Tests
 			BenchmarkRunner.Run<StructInitTest>();
 		}
 
+		private static void RunSimdTest()
+		{
+			BenchmarkRunner.Run<FloatSummTest>();
+		}
+
+
 		private static void RunLazyTest()
 		{
 			BenchmarkRunner.Run<LazyTest>(
 				ManualConfig.Create(DefaultConfig.Instance).With(new Job(new RunMode
 					{ InvocationCount = 2 * 8096 })));
+			//			BenchmarkDotNet = v0.10.1, OS = Microsoft Windows NT 6.1.7601 Service Pack 1
+			//Processor = Intel(R) Core(TM) i5 - 3210M CPU 2.50GHz, ProcessorCount = 4
+			//Frequency = 2435947 Hz, Resolution = 410.5180 ns, Timer = TSC
+			//	  [Host]     : Clr 4.0.30319.42000, 64bit RyuJIT-v4.6.1590.0
+			//  Job - NDUWLQ : Clr 4.0.30319.42000, 64bit RyuJIT-v4.6.1590.0
+			//
+			//InvocationCount = 16192
+			//
+			//
+			//			Method | Mean | StdDev | Allocated |
+			//------------------ | ----------- | ---------- | ---------- |
+			// RunWithDirectLazy | 65.2032 ns | 1.3368 ns | 64 B |
+			//RunWithCondLazy | 34.5843 ns | 0.1106 ns | 0 B |
+		}
+
+		private static void RunArraysTest()
+		{
+			BenchmarkRunner.Run<ArraysBoundsCheckTest>();
+			//BenchmarkDotNet = v0.10.1, OS = Microsoft Windows NT 6.1.7601 Service Pack 1
+			//Processor = Intel(R) Core(TM) i5 - 3210M CPU 2.50GHz, ProcessorCount = 4
+			//Frequency = 2435957 Hz, Resolution = 410.5163 ns, Timer = TSC
+			//[Host]     : Clr 4.0.30319.42000, 64bit RyuJIT-v4.6.1590.0
+			//DefaultJob: Clr 4.0.30319.42000, 64bit RyuJIT-v4.6.1590.0
+			//    Method | Mean | StdDev |
+			// --------- | ------------ | ----------- |
+			//  Sum_slow | 202.3664 ms | 15.7631 ms |
+			//  Sum_fast | 151.1016 ms | 0.2391 ms |
 		}
 
 		private static void RunComparationTest()
@@ -76,25 +121,6 @@ namespace Tests
 			//  ---------------- | ----------- | ---------- |
 			//   NonReadonlyCall | 1.3527 ns | 0.0431 ns |
 			//     ReadonlyCall | 10.3586 ns | 0.1511 ns |
-		}
-
-		private static void RunArraysTest()
-		{
-			BenchmarkRunner.Run<ArraysBoundsCheckTest>();
-			//BenchmarkDotNet = v0.10.1, OS = Microsoft Windows NT 6.1.7601 Service Pack 1
-			//Processor = Intel(R) Core(TM) i5 - 3210M CPU 2.50GHz, ProcessorCount = 4
-			//Frequency = 2435957 Hz, Resolution = 410.5163 ns, Timer = TSC
-			//[Host]     : Clr 4.0.30319.42000, 64bit RyuJIT-v4.6.1590.0
-			//DefaultJob: Clr 4.0.30319.42000, 64bit RyuJIT-v4.6.1590.0
-			//    Method | Mean | StdDev |
-			// --------- | ------------ | ----------- |
-			//  Sum_slow | 202.3664 ms | 15.7631 ms |
-			//  Sum_fast | 151.1016 ms | 0.2391 ms |
-		}
-
-		private static void RunSimdTest()
-		{
-			BenchmarkRunner.Run<FloatSummTest>();
 		}
 
 		private static void CheckEnviroment()
@@ -150,51 +176,6 @@ namespace Tests
 		private static void EndWithMessage(string message)
 		{
 			throw new Exception(message);
-		}
-	}
-
-	public class BuggyTest
-	{
-		private const int N = 10000;
-		private readonly byte[] data;
-		private readonly byte[] data2;
-
-		private readonly SHA256 sha256 = SHA256.Create();
-		private readonly MD5 md5 = MD5.Create();
-
-		public BuggyTest()
-		{
-			data = new byte[N];
-			new Random(42).NextBytes(data);
-
-			data2 = new byte[N];
-			new Random(42).NextBytes(data2);
-		}
-
-		[Benchmark]
-		public byte[] Sha256()
-		{
-			return sha256.ComputeHash(data);
-		}
-
-		[Benchmark]
-		public byte[] Md5()
-		{
-			return md5.ComputeHash(data);
-		}
-
-		//[Benchmark]
-		[Benchmark]
-		public byte[] Sha256__()
-		{
-			return sha256.ComputeHash(data2);
-		}
-
-		//[Benchmark]
-		[Benchmark]
-		public byte[] Md5__()
-		{
-			return md5.ComputeHash(data2);
 		}
 	}
 }
