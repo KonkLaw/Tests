@@ -57,5 +57,15 @@ namespace Tests
 		}
 
 	    public static bool GetRandomBool() => Random.Next() % 2 == 0;
+	    	
+		public static bool[] GetBooleans(int numbersCount)
+		{
+			bool[] result = new bool[numbersCount];
+			for (int i = 0; i < result.Length; i++)
+			{
+				result[i] = Random.Next(2) == 0;
+			}
+			return result;
+		}
     }
 }
