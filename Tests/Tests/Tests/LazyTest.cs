@@ -13,9 +13,7 @@ namespace Tests.Tests
 
 		public LazyDirect(Func<T> creator)
 		{
-			if (creator == null)
-				throw new ArgumentNullException(nameof(creator));
-			this.creator = creator;
+			this.creator = creator ?? throw new ArgumentNullException(nameof(creator)); ;
 			getter = FirstCreator;
 		}
 
@@ -54,10 +52,8 @@ namespace Tests.Tests
 
 		public LazyCond(Func<T> creator)
 		{
-			if (creator == null)
-				throw new ArgumentNullException(nameof(creator));
 			inited = false;
-			this.creator = creator;
+			this.creator = creator ?? throw new ArgumentNullException(nameof(creator));
 		}
 	}
 
@@ -71,7 +67,7 @@ namespace Tests.Tests
 
 		private const int CountTest = 2000000;
 
-		[Setup]
+		[GlobalSetupAttribute]
 		public void Setup()
 		{
 			lazy1 = new LazyDirect<int>[CountTest];
