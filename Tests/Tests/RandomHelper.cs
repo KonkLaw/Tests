@@ -67,5 +67,31 @@ namespace Tests
 			}
 			return result;
 		}
+
+
+        public static int[] GenerateRandomSequence_FisherYatesShuffle(int maxExclusive)
+        {
+            var numbers = new int[maxExclusive - 1];
+            for (int i = 0; i < numbers.Length; i++)
+            {
+                numbers[i] = i;
+            }
+            FisherYatesShuffle(numbers);
+            return numbers;
+        }
+
+        public static void FisherYatesShuffle(int[] input)
+        {
+            int indexForSwap = input.Length - 1; // Last number;
+            while(indexForSwap > 0)
+            {
+                int randomIndex = Random.Next(0, indexForSwap + 1);
+
+                int selectedNumber = input[randomIndex];
+                input[randomIndex] = input[indexForSwap];
+                input[indexForSwap] = selectedNumber;
+                indexForSwap--;
+            }
+        }
     }
 }

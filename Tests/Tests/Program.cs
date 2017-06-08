@@ -10,13 +10,69 @@ namespace Tests
 {
 	class Program
 	{
-		static void Main(string[] args)
+        private static void CheckEnviroment()
+        {
+            bool is64 = Environment.Is64BitProcess;
+            if (!is64)
+            {
+                EndWithMessage("Use 64 bit process.");
+            }
+            if (!Vector.IsHardwareAccelerated)
+            {
+                EndWithMessage("Hardware acceleration is dissabled or not supported.");
+            }
+
+            int sizeOfRegister = Vector<float>.Count;
+            if (sizeOfRegister != 4)
+            {
+                EndWithMessage("Wrong register size. Test should be corrected.");
+            }
+            Console.WriteLine(
+                $"Register size = {sizeOfRegister} int(float) numbers = {sizeOfRegister * sizeof(int)} bytes = {sizeOfRegister * sizeof(int) * 8} bits");
+        }
+
+        private static void CheckRunMode()
+        {
+            bool isDebug = false;
+#if (DEBUG)
+			isDebug = true;
+#endif
+            if (isDebug)
+            {
+                if (Debugger.IsAttached)
+                    return;
+                else
+                {
+                    EndWithMessage("Run in debug (without debuger).");
+                }
+            }
+            else
+            {
+                if (Debugger.IsAttached)
+                {
+                    EndWithMessage("Run in release but with debuger.");
+                }
+                else
+                {
+                    Console.WriteLine("Press any key to start.");
+                    Console.ReadLine();
+                }
+            }
+        }
+
+        private static void EndWithMessage(string message)
+        {
+            throw new Exception(message);
+        }
+
+        static void Main(string[] args)
 		{
-			ApproveReleaseWithoutDebugerStart();
+            CheckEnviroment();
+            CheckRunMode();
 
-			//CheckEnviroment();
+			
 			// TODO: uncoment necessary test.
-
+		    //RunDictionaryVsArray();
 			//RunIntSumTest();
 			//BoolToIntConvertion();
 			//RunStructInitTest();
@@ -26,14 +82,14 @@ namespace Tests
 			//RunLazyTest();
 			//RunArraysTest();
 			//RunComparationTest();
-			//ReadonlyStructRun();
+		    //ReadonlyStructRun();
 
 			Console.WriteLine("End of test.");
 			Console.WriteLine("Press any key for exit.");
 			Console.ReadLine();
 		}
 
-		private static void RunIntSumTest()
+	    private static void RunIntSumTest()
 		{
 			BenchmarkRunner.Run<IntSumTest>();
 		}
@@ -57,6 +113,7 @@ namespace Tests
 			BenchmarkRunner.Run<FloatSummTest>();
 		}
 
+        // stats
 
 		private static void RunLazyTest()
 		{
@@ -123,59 +180,8 @@ namespace Tests
 			//     ReadonlyCall | 10.3586 ns | 0.1511 ns |
 		}
 
-		private static void CheckEnviroment()
-		{
-			bool is64 = Environment.Is64BitProcess;
-			if (!is64)
-			{
-				EndWithMessage("Use 64 bit process.");
-			}
-			bool isDebug = false;
-			#if (DEBUG)
-			    isDebug = true;
-			#endif
-			if (isDebug)
-			{
-				EndWithMessage("Build in 'Release' mode.");
-			}
+        // new stats
 
-			if (Debugger.IsAttached)
-			{
-				EndWithMessage("Debuger is attached.");
-			}
-
-			if (!Vector.IsHardwareAccelerated)
-			{
-				EndWithMessage("Hardware acceleration is dissabled or not supported.");
-			}
-
-			int sizeOfRegister = Vector<float>.Count;
-			if (sizeOfRegister != 4)
-			{
-				EndWithMessage("Wrong register size. Test should be corrected.");
-			}
-			Console.WriteLine(string.Format("Register size = {0} int(float) numbers = {1} bytes = {2} bits",
-					sizeOfRegister,
-					sizeOfRegister * sizeof(int),
-					sizeOfRegister * sizeof(int) * 8));
-		}
-
-		private static void ApproveReleaseWithoutDebugerStart()
-		{
-			bool isDebug = false;
-#if (DEBUG)
-			isDebug = true;
-#endif
-			if (isDebug || Debugger.IsAttached)
-				return;
-
-			Console.WriteLine("Press any key to start.");
-			Console.ReadLine();
-		}
-
-		private static void EndWithMessage(string message)
-		{
-			throw new Exception(message);
-		}
+        private static void RunDictionaryVsArray() => BenchmarkRunner.Run<DictionaryVsArrayTest>();
 	}
 }
