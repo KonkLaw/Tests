@@ -6,7 +6,7 @@ using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Jobs;
 using Tests.Tests;
 
-namespace Tests
+namespace Tests   
 {
 	class Program
 	{
@@ -70,9 +70,9 @@ namespace Tests
             CheckEnviroment();
             CheckRunMode();
 
-			
+
 			// TODO: uncoment necessary test.
-		    //RunDictionaryVsArray();
+
 			//RunIntSumTest();
 			//BoolToIntConvertion();
 			//RunStructInitTest();
@@ -82,7 +82,11 @@ namespace Tests
 			//RunLazyTest();
 			//RunArraysTest();
 			//RunComparationTest();
-		    //ReadonlyStructRun();
+			//ReadonlyStructRun();
+
+			// NEW:
+			//RunDictionaryVsArray();
+			RunDelegateVsMethodCall();
 
 			Console.WriteLine("End of test.");
 			Console.WriteLine("Press any key for exit.");
@@ -113,7 +117,7 @@ namespace Tests
 			BenchmarkRunner.Run<FloatSummTest>();
 		}
 
-        // stats
+		// stats
 
 		private static void RunLazyTest()
 		{
@@ -180,8 +184,10 @@ namespace Tests
 			//     ReadonlyCall | 10.3586 ns | 0.1511 ns |
 		}
 
-        // new stats
+		// new stats
 
-        private static void RunDictionaryVsArray() => BenchmarkRunner.Run<DictionaryVsArrayTest>();
+		private static void RunDictionaryVsArray() => BenchmarkRunner.Run<DictionaryVsArrayTest>();
+
+		private static void RunDelegateVsMethodCall() => BenchmarkRunner.Run<CallTest>();
 	}
 }

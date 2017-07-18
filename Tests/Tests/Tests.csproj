@@ -157,6 +157,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Tests\CallTest.cs" />
     <Compile Include="Tests\DictionaryVsArrayTest.cs" />
     <Compile Include="Draft\ArglistTest.cs" />
     <Compile Include="Log.cs" />
