@@ -70,23 +70,24 @@ namespace Tests
             CheckEnviroment();
             CheckRunMode();
 
-
 			// TODO: uncoment necessary test.
-
 			//RunIntSumTest();
 			//BoolToIntConvertion();
 			//RunStructInitTest();
 			//RunSimdTest();
 
-			// MEASURMENT SAVED:
+			// TODO: MEASURMENT SAVED:
 			//RunLazyTest();
 			//RunArraysTest();
 			//RunComparationTest();
 			//ReadonlyStructRun();
 
 			// NEW:
-			//RunDictionaryVsArray();
-			RunDelegateVsMethodCall();
+			BenchmarkRunner.Run<
+				//DictionaryVsArrayTest
+				//CallTest
+				SimdTest
+				>();
 
 			Console.WriteLine("End of test.");
 			Console.WriteLine("Press any key for exit.");
@@ -183,11 +184,5 @@ namespace Tests
 			//   NonReadonlyCall | 1.3527 ns | 0.0431 ns |
 			//     ReadonlyCall | 10.3586 ns | 0.1511 ns |
 		}
-
-		// new stats
-
-		private static void RunDictionaryVsArray() => BenchmarkRunner.Run<DictionaryVsArrayTest>();
-
-		private static void RunDelegateVsMethodCall() => BenchmarkRunner.Run<CallTest>();
 	}
 }
