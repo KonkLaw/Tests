@@ -4,20 +4,6 @@ using BenchmarkDotNet.Attributes;
 
 // RESULTS:
 //
-// COUNT = 5
-//BenchmarkDotNet=v0.10.7, OS=Windows 10 Redstone 1 (10.0.14393)
-//Processor=Intel Core i5-2500 CPU 3.30GHz(Sandy Bridge), ProcessorCount=4
-//Frequency=3233206 Hz, Resolution=309.2905 ns, Timer=TSC
-//  [Host]     : Clr 4.0.30319.42000, 64bit RyuJIT-v4.7.2053.0
-//  DefaultJob : Clr 4.0.30319.42000, 64bit RyuJIT-v4.7.2053.0
-//
-//
-//            Method |     Mean |     Error |    StdDev |
-//------------------ |---------:|----------:|----------:|
-// RunWithDictionary | 78.00 ns | 0.1320 ns | 0.1235 ns |
-//      RunWithArray | 29.02 ns | 0.0236 ns | 0.0221 ns |
-//
-//
 //
 // COUNT = 100
 //BenchmarkDotNet=v0.10.7, OS=Windows 10 Redstone 1 (10.0.14393)
@@ -62,6 +48,19 @@ using BenchmarkDotNet.Attributes;
 // RunWithDictionary | 270.8 ns | 0.2621 ns | 0.2452 ns |
 //      RunWithArray | 275.8 ns | 5.5552 ns | 5.7048 ns |
 //
+//
+// COUNT = 5
+//BenchmarkDotNet=v0.10.7, OS=Windows 10 Redstone 1 (10.0.14393)
+//Processor=Intel Core i5-2500 CPU 3.30GHz(Sandy Bridge), ProcessorCount=4
+//Frequency=3233206 Hz, Resolution=309.2905 ns, Timer=TSC
+//  [Host]     : Clr 4.0.30319.42000, 64bit RyuJIT-v4.7.2053.0
+//  DefaultJob : Clr 4.0.30319.42000, 64bit RyuJIT-v4.7.2053.0
+//
+//
+//            Method |     Mean |     Error |    StdDev |
+//------------------ |---------:|----------:|----------:|
+// RunWithDictionary | 78.00 ns | 0.1320 ns | 0.1235 ns |
+//      RunWithArray | 29.02 ns | 0.0236 ns | 0.0221 ns |
 
 namespace Tests.Tests
 {
