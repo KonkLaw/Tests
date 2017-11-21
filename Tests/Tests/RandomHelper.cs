@@ -6,7 +6,12 @@ namespace Tests
     {
         private static readonly Random Random = new Random(DateTime.Now.Millisecond);
 
-        public static float[] GetFloatNumbers(int numbersCount)
+	    public static float GetFloat()
+	    {
+			return Random.Next() / (1.0f / int.MaxValue);
+	    }
+
+		public static float[] GetFloatNumbers(int numbersCount)
         {
             float[] result = new float[numbersCount];
             for (int i = 0; i < result.Length; i++)
@@ -15,6 +20,20 @@ namespace Tests
             }
             return result;
         }
+
+	    public static Vector3F[] GetVectors(int count)
+	    {
+		    float[] values = GetFloatNumbers(count * Vector3F.ComponetsCount);
+			var vectors = new Vector3F[count];
+		    for (int i = 0; i < count; i++)
+		    {
+			    vectors[i] = new Vector3F(
+					Vector3F.ComponetsCount * values[i],
+					Vector3F.ComponetsCount * values[i] + 1,
+					Vector3F.ComponetsCount * values[i] + 2);
+		    }
+		    return vectors;
+	    }
 
 		public static double[] GetDoubleNumbers(int numbersCount)
 		{

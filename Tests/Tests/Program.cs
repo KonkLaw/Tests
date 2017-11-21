@@ -74,7 +74,6 @@ namespace Tests
 			//RunIntSumTest();
 			//BoolToIntConvertion();
 			//RunStructInitTest();
-			//RunSimdTest();
 
 			// TODO: MEASURMENT SAVED:
 			//RunLazyTest();
@@ -84,8 +83,10 @@ namespace Tests
 
 			// NEW:
 			BenchmarkRunner.Run<
+				//ReadonlyStructTest
 				//DictionaryVsArrayTest
 				//CallTest
+				//FloatSummTest
 				SimdTest
 				>();
 
@@ -111,11 +112,6 @@ namespace Tests
 		private static void RunStructInitTest()
 		{
 			BenchmarkRunner.Run<StructInitTest>();
-		}
-
-		private static void RunSimdTest()
-		{
-			BenchmarkRunner.Run<FloatSummTest>();
 		}
 
 		// stats
@@ -169,20 +165,6 @@ namespace Tests
 			//------------ | ----------- | ---------- |
 			//   RunSigned | 27.6597 ms | 0.1177 ms |
 			// RunUnsigned | 12.2865 ms | 0.0896 ms |
-		}
-
-		private static void ReadonlyStructRun()
-		{
-			BenchmarkRunner.Run<ReadonlyStructTest>();
-			//BenchmarkDotNet = v0.10.1, OS = Microsoft Windows NT 6.1.7601 Service Pack 1
-			//Processor = Intel(R) Core(TM) i5 - 3210M CPU 2.50GHz, ProcessorCount = 4
-			//Frequency = 2435957 Hz, Resolution = 410.5163 ns, Timer = TSC
-			//[Host]     : Clr 4.0.30319.42000, 64bit RyuJIT-v4.6.1590.0
-			//DefaultJob: Clr 4.0.30319.42000, 64bit RyuJIT-v4.6.1590.0
-			//            Method | Mean | StdDev |
-			//  ---------------- | ----------- | ---------- |
-			//   NonReadonlyCall | 1.3527 ns | 0.0431 ns |
-			//     ReadonlyCall | 10.3586 ns | 0.1511 ns |
 		}
 	}
 }
