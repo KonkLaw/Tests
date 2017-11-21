@@ -171,8 +171,9 @@
     <Compile Include="Tests\IntSumTest.cs" />
     <Compile Include="Tests\LazyTest.cs" />
     <Compile Include="Tests\ReadonlyStructTest.cs" />
+    <Compile Include="Tests\SimdTest.cs" />
     <Compile Include="Tests\StructInitTest.cs" />
-    <Compile Include="Tests\Vectors.cs" />
+    <Compile Include="Vectors4.cs" />
     <Compile Include="Tests\VectorSumTest.cs" />
   </ItemGroup>
   <ItemGroup>

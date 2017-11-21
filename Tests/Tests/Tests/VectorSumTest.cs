@@ -1,6 +1,18 @@
 ﻿using BenchmarkDotNet.Attributes;
 using System.Numerics;
 
+//BenchmarkDotNet=v0.10.7, OS=Windows 10 Redstone 2 (10.0.15063)
+//Processor=Intel Core i5-2500 CPU 3.30GHz(Sandy Bridge), ProcessorCount=4
+//Frequency=3233209 Hz, Resolution=309.2902 ns, Timer=TSC
+//[Host]     : Clr 4.0.30319.42000, 64bit RyuJIT-v4.7.2115.0
+//DefaultJob : Clr 4.0.30319.42000, 64bit RyuJIT-v4.7.2115.0
+//
+//             Method |     Mean |     Error |    StdDev |
+//--------------------|---------:|----------:|----------:|
+//  ArraysSumWithSimd | 33.46 ms | 0.2570 ms | 0.2404 ms |
+// VectorsSumWithSimd | 32.62 ms | 0.1490 ms | 0.1394 ms |
+//VectorsValueTypeSum | 90.84 ms | 0.2621 ms | 0.2452 ms |
+
 namespace Tests.Tests
 {
 	public class FloatSummTest

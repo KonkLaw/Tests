@@ -1,4 +1,4 @@
-namespace Tests.Tests
+namespace Tests
 {
 	public class Vector4FRef
 	{
@@ -44,5 +44,21 @@ namespace Tests.Tests
 				a.Y + b.Y,
 				a.Z + b.Z,
 				a.W + b.W);
+	}
+
+	public struct Vector3F
+	{
+		public const int ComponetsCount = 3;
+
+		public float X;
+		public float Y;
+		public float Z;
+
+		public Vector3F(float x, float y, float z)
+		{
+			X = x;
+			Y = y;
+			Z = z;
+		}
 	}
 }
