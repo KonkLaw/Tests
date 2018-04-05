@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using BenchmarkDotNet.Attributes;
+using Tests.Tests.BaseDataTypes;
 
 //              Method |       Mean |     Error |    StdDev |
 //---------------------|-----------:|----------:|----------:|
@@ -15,7 +16,7 @@ namespace Tests.Tests
     {
 	    private const int VectorsCount = 100000;
 
-	    private static readonly Matrix4x4F MatrixNonSimd = new Matrix4x4F
+	    private static readonly Matrix4F MatrixNonSimd = new Matrix4F
 		{
 			M11 = RandomHelper.GetFloat(),
 			M12 = RandomHelper.GetFloat(),
@@ -109,7 +110,7 @@ namespace Tests.Tests
 		[Benchmark]
 	    public Vector3F[] NonSimdRun()
 		{
-			Matrix4x4F m = MatrixNonSimd;
+			Matrix4F m = MatrixNonSimd;
 			Vector3F[] _vectors = vectorsNonSimd;
 			for (int i = 0; i < _vectors.Length; i++)
 			{
@@ -175,43 +176,6 @@ namespace Tests.Tests
 			    _vectors[i] = Vector3.Multiply(v, _v1) + Vector3.Multiply(v, _v2) + Vector3.Multiply(v, _v3) + _v4;
 		    }
 		    return _vectors;
-		}
-	}
-
-	public struct Matrix4x4F
-	{
-		public float M11;
-		public float M12;
-		public float M13;
-		public float M14;
-		public float M21;
-		public float M22;
-		public float M23;
-		public float M24;
-		public float M31;
-		public float M32;
-		public float M33;
-		public float M34;
-		public float M41;
-		public float M42;
-		public float M43;
-		public float M44;
-
-		public static Vector3F operator *(Matrix4x4F m, Vector3F v)
-		{
-			return new Vector3F
-			(
-				m.M11 * v.X + m.M21 * v.Y + m.M31 * v.Z + m.M41,
-				m.M12 * v.X + m.M22 * v.Y + m.M32 * v.Z + m.M42,
-				m.M13 * v.X + m.M23 * v.Y + m.M33 * v.Z + m.M43
-			);
-			float w = 1f / ((v.X * m.M14) + (v.Y * m.M24) + (v.Z * m.M34) + m.M44);
-			return new Vector3F
-			(
-				((m.M11 * v.X + m.M21 * v.Y + m.M31 * v.Z + m.M41) * w),
-				((m.M12 * v.X + m.M22 * v.Y + m.M32 * v.Z + m.M42) * w),
-				((m.M13 * v.X + m.M23 * v.Y + m.M33 * v.Z + m.M43) * w)
-			);
 		}
 	}
 }
