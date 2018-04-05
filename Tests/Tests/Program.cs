@@ -23,9 +23,9 @@ namespace Tests
             }
 
             int sizeOfRegister = Vector<float>.Count;
-            if (sizeOfRegister != 4)
+            if (sizeOfRegister < 4)
             {
-                EndWithMessage("Wrong register size. Test should be corrected.");
+                EndWithMessage("Wrong register size. Test should be uncorrected.");
             }
             Console.WriteLine(
                 $"Register size = {sizeOfRegister} int(float) numbers = {sizeOfRegister * sizeof(int)} bytes = {sizeOfRegister * sizeof(int) * 8} bits");
@@ -87,7 +87,8 @@ namespace Tests
 				//DictionaryVsArrayTest
 				//CallTest
 				//FloatSummTest
-				SimdTest
+				//SimdTest
+				MatrixTest
 				>();
 
 			Console.WriteLine("End of test.");
