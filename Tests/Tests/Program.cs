@@ -12,7 +12,8 @@ namespace Tests
 	{
         private static void CheckEnviroment()
         {
-            bool is64 = Environment.Is64BitProcess;
+	        Console.WriteLine($"Local processors count = {Environment.ProcessorCount}");
+			bool is64 = Environment.Is64BitProcess;
             if (!is64)
             {
                 EndWithMessage("Use 64 bit process.");
@@ -28,7 +29,7 @@ namespace Tests
                 EndWithMessage("Wrong register size. Test should be uncorrected.");
             }
             Console.WriteLine(
-                $"Register size = {sizeOfRegister} int(float) numbers = {sizeOfRegister * sizeof(int)} bytes = {sizeOfRegister * sizeof(int) * 8} bits");
+                $"Register size = {sizeOfRegister} int/float numbers = {sizeOfRegister * sizeof(int)} bytes = {sizeOfRegister * sizeof(int) * 8} bits");
         }
 
         private static void CheckRunMode()
@@ -54,7 +55,7 @@ namespace Tests
                 }
                 else
                 {
-                    Console.WriteLine("Press any key to start.");
+                    Console.WriteLine("Press 'Enter' to start.");
                     Console.ReadLine();
                 }
             }
@@ -88,7 +89,8 @@ namespace Tests
 				//CallTest
 				//FloatSummTest
 				//SimdTest
-				MatrixTest
+				//MatrixTest
+				ParralelExcutionTest
 				>();
 
 			Console.WriteLine("End of test.");
