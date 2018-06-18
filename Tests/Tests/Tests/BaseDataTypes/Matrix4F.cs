@@ -1,4 +1,6 @@
-﻿namespace Tests.Tests.BaseDataTypes
+﻿using System;
+
+namespace Tests.Tests.BaseDataTypes
 {
 	public struct Matrix4F
 	{
@@ -65,6 +67,71 @@
 			{
 				return *((Matrix4FDuplicate*)&m);
 			}
+		}
+
+		public static void Invert(Matrix4F value, out Matrix4F res)
+		{
+			float b0 = (value.M31 * value.M42) - (value.M32 * value.M41);
+			float b1 = (value.M31 * value.M43) - (value.M33 * value.M41);
+			float b2 = (value.M34 * value.M41) - (value.M31 * value.M44);
+			float b3 = (value.M32 * value.M43) - (value.M33 * value.M42);
+			float b4 = (value.M34 * value.M42) - (value.M32 * value.M44);
+			float b5 = (value.M33 * value.M44) - (value.M34 * value.M43);
+
+			float d11 = value.M22 * b5 + value.M23 * b4 + value.M24 * b3;
+			float d12 = value.M21 * b5 + value.M23 * b2 + value.M24 * b1;
+			float d13 = value.M21 * -b4 + value.M22 * b2 + value.M24 * b0;
+			float d14 = value.M21 * b3 + value.M22 * -b1 + value.M23 * b0;
+
+			float det = value.M11 * d11 - value.M12 * d12 + value.M13 * d13 - value.M14 * d14;
+			if (Math.Abs(det) <= 1e-15)
+			{
+				res = new Matrix4F();
+			}
+
+			det = 1f / det;
+
+			float a0 = (value.M11 * value.M22) - (value.M12 * value.M21);
+			float a1 = (value.M11 * value.M23) - (value.M13 * value.M21);
+			float a2 = (value.M14 * value.M21) - (value.M11 * value.M24);
+			float a3 = (value.M12 * value.M23) - (value.M13 * value.M22);
+			float a4 = (value.M14 * value.M22) - (value.M12 * value.M24);
+			float a5 = (value.M13 * value.M24) - (value.M14 * value.M23);
+
+			float d21 = value.M12 * b5 + value.M13 * b4 + value.M14 * b3;
+			float d22 = value.M11 * b5 + value.M13 * b2 + value.M14 * b1;
+			float d23 = value.M11 * -b4 + value.M12 * b2 + value.M14 * b0;
+			float d24 = value.M11 * b3 + value.M12 * -b1 + value.M13 * b0;
+
+			float d31 = value.M42 * a5 + value.M43 * a4 + value.M44 * a3;
+			float d32 = value.M41 * a5 + value.M43 * a2 + value.M44 * a1;
+			float d33 = value.M41 * -a4 + value.M42 * a2 + value.M44 * a0;
+			float d34 = value.M41 * a3 + value.M42 * -a1 + value.M43 * a0;
+
+			float d41 = value.M32 * a5 + value.M33 * a4 + value.M34 * a3;
+			float d42 = value.M31 * a5 + value.M33 * a2 + value.M34 * a1;
+			float d43 = value.M31 * -a4 + value.M32 * a2 + value.M34 * a0;
+			float d44 = value.M31 * a3 + value.M32 * -a1 + value.M33 * a0;
+
+			res = new Matrix4F
+			{
+				M11 = +d11 * det,
+				M12 = -d21 * det,
+				M13 = +d31 * det,
+				M14 = -d41 * det,
+				M21 = -d12 * det,
+				M22 = +d22 * det,
+				M23 = -d32 * det,
+				M24 = +d42 * det,
+				M31 = +d13 * det,
+				M32 = -d23 * det,
+				M33 = +d33 * det,
+				M34 = -d43 * det,
+				M41 = -d14 * det,
+				M42 = +d24 * det,
+				M43 = -d34 * det,
+				M44 = +d44 * det
+			};
 		}
 	}
 

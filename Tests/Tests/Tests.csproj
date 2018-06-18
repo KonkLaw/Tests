@@ -172,6 +172,7 @@
     <Compile Include="Tests\LazyTest.cs" />
     <Compile Include="Tests\BaseDataTypes\Matrix4F.cs" />
     <Compile Include="Tests\MatrixTest.cs" />
+    <Compile Include="Tests\ParralelExcutionTest.cs" />
     <Compile Include="Tests\ReadonlyStructTest.cs" />
     <Compile Include="Tests\SimdTest.cs" />
     <Compile Include="Tests\StructInitTest.cs" />
