@@ -4,7 +4,7 @@ namespace Tests
 {
     class RandomHelper
     {
-        private static readonly Random Random = new Random(DateTime.Now.Millisecond);
+	    private static readonly Random Random = new Random(DateTime.Now.Millisecond);
 
 	    public static float GetFloat()
 	    {
@@ -13,7 +13,7 @@ namespace Tests
 
 		public static float[] GetFloatNumbers(int numbersCount)
         {
-            float[] result = new float[numbersCount];
+            var result = new float[numbersCount];
             for (int i = 0; i < result.Length; i++)
             {
                 result[i] = Random.Next() / (1.0f / int.MaxValue);
@@ -37,7 +37,7 @@ namespace Tests
 
 		public static double[] GetDoubleNumbers(int numbersCount)
 		{
-			double[] result = new double[numbersCount];
+			var result = new double[numbersCount];
 			for (int i = 0; i < result.Length; i++)
 			{
 				result[i] = Random.NextDouble();
@@ -47,7 +47,7 @@ namespace Tests
 
 		public static long[] GetLongNumbers(int numbersCount)
 		{
-			long[] result = new long[numbersCount];
+			var result = new long[numbersCount];
 			for (int i = 0; i < result.Length; i++)
 			{
 				result[i] = Random.Next() | (Random.Next() << 32);
@@ -57,7 +57,7 @@ namespace Tests
 
 		public static int[] GetIntNumbers(int numbersCount)
 		{
-			int[] result = new int[numbersCount];
+			var result = new int[numbersCount];
 			for (int i = 0; i < result.Length; i++)
 			{
 				result[i] = Random.Next();
@@ -67,7 +67,7 @@ namespace Tests
 
 		public static int[] GetIntNumbers(int numbersCount, int minValue, int maxValue)
 		{
-			int[] result = new int[numbersCount];
+			var result = new int[numbersCount];
 			for (int i = 0; i < result.Length; i++)
 			{
 				result[i] = Random.Next(minValue, maxValue);
@@ -79,7 +79,7 @@ namespace Tests
 	    	
 		public static bool[] GetBooleans(int numbersCount)
 		{
-			bool[] result = new bool[numbersCount];
+			var result = new bool[numbersCount];
 			for (int i = 0; i < result.Length; i++)
 			{
 				result[i] = Random.Next(2) == 0;
