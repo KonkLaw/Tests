@@ -1,4 +1,4 @@
-namespace Tests
+namespace Testsclass Vector
 {
 	public class Vector4FRef
 	{

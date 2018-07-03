@@ -12,7 +12,7 @@ using Tests.Tests.BaseDataTypes;
 
 namespace Tests.Tests
 {
-    public class SimdTest
+    public class VectorOperationsSimdTest
     {
 	    private const int VectorsCount = 100000;
 
@@ -79,7 +79,7 @@ namespace Tests.Tests
 		    RandomHelper.GetFloat(),
 		    RandomHelper.GetFloat());
 
-		public SimdTest()
+		public VectorOperationsSimdTest()
 	    {
 		    vectorsNonSimd = RandomHelper.GetVectors(VectorsCount);
 
