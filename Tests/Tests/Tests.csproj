@@ -159,6 +159,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FloatSummTest.cs" />
+    <Compile Include="RunHelper.cs" />
     <Compile Include="Tests\CallTest.cs" />
     <Compile Include="Tests\DictionaryVsArrayTest.cs" />
     <Compile Include="Draft\ArglistTest.cs" />
@@ -180,7 +182,6 @@
     <Compile Include="Tests\SimdTest.cs" />
     <Compile Include="Tests\StructInitTest.cs" />
     <Compile Include="Vectors4.cs" />
-    <Compile Include="Tests\VectorSumTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

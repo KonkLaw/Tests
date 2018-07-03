@@ -2,6 +2,17 @@
 using System;
 using System.Linq;
 
+//BenchmarkDotNet = v0.10.1, OS = Microsoft Windows NT 6.1.7601 Service Pack 1
+//Processor = Intel(R) Core(TM) i5 - 3210M CPU 2.50GHz, ProcessorCount = 4
+//Frequency = 2435917 Hz, Resolution = 410.5230 ns, Timer = TSC
+//[Host]     : Clr 4.0.30319.42000, 64bit RyuJIT-v4.6.1590.0
+//DefaultJob: Clr 4.0.30319.42000, 64bit RyuJIT-v4.6.1590.0
+//
+//	  Method | Mean | StdDev |
+//------------ | ----------- | ---------- |
+//   RunSigned | 27.6597 ms | 0.1177 ms |
+// RunUnsigned | 12.2865 ms | 0.0896 ms |
+
 namespace Tests.Tests
 {
 	public class ComparationTest

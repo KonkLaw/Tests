@@ -1,5 +1,15 @@
 ﻿using BenchmarkDotNet.Attributes;
 
+//BenchmarkDotNet = v0.10.1, OS = Microsoft Windows NT 6.1.7601 Service Pack 1
+//Processor = Intel(R) Core(TM) i5 - 3210M CPU 2.50GHz, ProcessorCount = 4
+//Frequency = 2435957 Hz, Resolution = 410.5163 ns, Timer = TSC
+//[Host]     : Clr 4.0.30319.42000, 64bit RyuJIT-v4.6.1590.0
+//DefaultJob: Clr 4.0.30319.42000, 64bit RyuJIT-v4.6.1590.0
+//    Method | Mean | StdDev |
+// --------- | ------------ | ----------- |
+//  Sum_slow | 202.3664 ms | 15.7631 ms |
+//  Sum_fast | 151.1016 ms | 0.2391 ms |
+
 namespace Tests.Tests
 {
 	public class ArraysBoundsCheckTest
