@@ -31,9 +31,10 @@ namespace Tests
 				//DictionaryVsArrayTest
 				//MatrixTest
 				//ParralelExcutionTest
-				//SimdTest
 				//ReadonlyStructTest
-				StrucByIndexTest
+				//SimdTest
+				//StrucByIndexTest
+				VectorOperationsSimdTest
 				>();
 
 			Console.WriteLine("End of test.");
