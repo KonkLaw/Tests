@@ -1,4 +1,4 @@
-namespace Testsclass Vector
+namespace Tests.Tests.BaseDataTypes
 {
 	public class Vector4FRef
 	{

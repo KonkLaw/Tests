@@ -1,5 +1,6 @@
 ﻿using BenchmarkDotNet.Attributes;
 using System.Numerics;
+using Tests.Tests.BaseDataTypes;
 
 //BenchmarkDotNet=v0.10.7, OS=Windows 10 Redstone 2 (10.0.15063)
 //Processor=Intel Core i5-2500 CPU 3.30GHz(Sandy Bridge), ProcessorCount=4

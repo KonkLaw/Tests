@@ -1,4 +1,5 @@
 ﻿using System;
+using Tests.Tests.BaseDataTypes;
 
 namespace Tests
 {
