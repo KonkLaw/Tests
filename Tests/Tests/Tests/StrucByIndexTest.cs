@@ -16,6 +16,21 @@ using System.Runtime.CompilerServices;
 //  GetWithConditions | 619.1 us | 1.7965 us | 1.6804 us |
 
 
+//	BenchmarkDotNet=v0.10.7, OS=Windows 10.0.17134
+//	Processor=Intel Core i7-8700K CPU 3.70GHz, ProcessorCount=12
+//	Frequency=3609384 Hz, Resolution=277.0556 ns, Timer=TSC
+//[Host]     : Clr 4.0.30319.42000, 64bit RyuJIT-v4.7.3110.0
+//DefaultJob : Clr 4.0.30319.42000, 64bit RyuJIT-v4.7.3110.0
+
+
+//     Method |      Mean |     Error |    StdDev |
+//------------------- |----------:|----------:|----------:|
+//   GetByConversion | 133.05 us | 0.8309 us | 0.7772 us |
+// GetFromArrayByRef |  96.35 us | 0.2012 us | 0.1680 us |
+//GetFromArrayByThis |  97.59 us | 0.6532 us | 0.6110 us |
+// GetWithConditions | 413.81 us | 1.5028 us | 1.2549 us |
+
+
 namespace Tests.Tests
 {
 	public class StrucByIndexTest

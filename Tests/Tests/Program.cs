@@ -33,8 +33,8 @@ namespace Tests
 				//ParralelExcutionTest
 				//ReadonlyStructTest
 				//SimdTest
-				//StrucByIndexTest
-				VectorOperationsSimdTest
+				StrucByIndexTest
+				//VectorOperationsSimdTest
 				>();
 
 			Console.WriteLine("End of test.");
