@@ -108,27 +108,39 @@ namespace Tests.Tests
 		}
 
 		[Benchmark]
-	    public Vector3F[] NonSimdRun()
+	    public Vector3F[] MatrixByVector_NonSimd_NoDivision()
 		{
 			Matrix4F m = MatrixNonSimd;
-			Vector3F[] _vectors = vectorsNonSimd;
-			for (int i = 0; i < _vectors.Length; i++)
+			Vector3F[] vectors_ = vectorsNonSimd;
+			for (int i = 0; i < vectors_.Length; i++)
 			{
-				_vectors[i] = m * _vectors[i];
+				vectors_[i] = m.MultiplyNoDivision(in vectors_[i]);
 			}
-			return _vectors;
+			return vectors_;
 		}
 
-	    [Benchmark]
+		[Benchmark]
+		public Vector3F[] MatrixByVector_NonSimd_PlusDivision()
+		{
+			Matrix4F m = MatrixNonSimd;
+			Vector3F[] vectors_ = vectorsNonSimd;
+			for (int i = 0; i < vectors_.Length; i++)
+			{
+				vectors_[i] = m.MultiplyWithDivision(in vectors_[i]);
+			}
+			return vectors_;
+		}
+
+		[Benchmark]
 		public Vector3[] SimdRun3()
 	    {
 		    Matrix4x4 m = MatrixSimd;
-		    Vector3[] _vectors = vectorsSimd3;
-		    for (int i = 0; i < _vectors.Length; i++)
+		    Vector3[] vectors_ = vectorsSimd3;
+		    for (int i = 0; i < vectors_.Length; i++)
 		    {
-			    _vectors[i] = Vector3.Transform(_vectors[i], m);
+				vectors_[i] = Vector3.Transform(vectors_[i], m);
 		    }
-		    return _vectors;
+		    return vectors_;
 	    }
 
 	    [Benchmark]

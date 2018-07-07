@@ -1,19 +1,23 @@
 ﻿using BenchmarkDotNet.Attributes;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
-// BenchmarkDotNet=v0.10.7, OS=Windows 10.0.17134
-// Processor=Intel Core i5-3210M CPU 2.50GHz(Ivy Bridge), ProcessorCount=4
-// Frequency=2435879 Hz, Resolution=410.5294 ns, Timer=TSC
+//BenchmarkDotNet=v0.10.7, OS=Windows 10.0.17134
+//Processor=Intel Core i5-3210M CPU 2.50GHz(Ivy Bridge), ProcessorCount=4
+//Frequency=2435879 Hz, Resolution=410.5294 ns, Timer=TSC
 //  [Host]     : Clr 4.0.30319.42000, 64bit RyuJIT-v4.7.3110.0
 //  DefaultJob : Clr 4.0.30319.42000, 64bit RyuJIT-v4.7.3110.0
 
 
-//             Method |     Mean |     Error |    StdDev |
-//------------------- |---------:|----------:|----------:|
-//    GetByConversion | 204.3 us | 1.1822 us | 1.0480 us |
-//  GetFromArrayByRef | 153.2 us | 0.6373 us | 0.5961 us |
-// GetFromArrayByThis | 153.1 us | 0.4251 us | 0.3550 us |
-//  GetWithConditions | 619.1 us | 1.7965 us | 1.6804 us |
+//                                    Method |     Mean |     Error |    StdDev |
+//------------------------------------------ |---------:|----------:|----------:|
+//                           GetByConversion | 203.4 us | 0.8550 us | 0.7998 us |
+//                         GetFromArrayByRef | 148.0 us | 0.5221 us | 0.4360 us |
+//                        GetFromArrayByThis | 147.4 us | 1.3208 us | 1.1708 us |
+//                         GetWithConditions | 606.4 us | 1.7922 us | 1.6765 us |
+// GetFromArrayByThis_FromSaveWithConversion | 166.7 us | 0.5212 us | 0.4875 us |
+
+
 
 
 //	BenchmarkDotNet=v0.10.7, OS=Windows 10.0.17134
@@ -38,6 +42,8 @@ namespace Tests.Tests
 		private const int Count = 100_000;
 		private readonly int[] indexes;
 		private readonly IndexerStruct strusture;
+		private readonly SafeStruct safeStruct;
+
 		private int index;
 
 		public StrucByIndexTest()
@@ -89,13 +95,48 @@ namespace Tests.Tests
 			}
 			return res;
 		}
+
+		[Benchmark]
+		public unsafe float GetFromArrayByThis_FromSaveWithConversion()
+		{
+			float res = 0;
+			for (int i = 0; i <= Count; i++)
+			{
+				res += safeStruct.GetFromArrayByThis(indexes[i]);
+			}
+			return res;
+		}
 	}
 
-	unsafe struct IndexerStruct
+	struct SafeStruct
 	{
-		private fixed float fields[3];
 		public float X;
 		public float Y;
+		public float Z;
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public float GetFromArrayByThis(int i)
+		{
+			return GetFromArrayByRef(this, i);
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		private unsafe static float GetFromArrayByRef(SafeStruct str, int i)
+		{
+			return (*((IndexerStruct*)(&str))).GetFromArrayByThis(i);
+		}
+	}
+
+	[StructLayout(LayoutKind.Explicit)]
+	unsafe struct IndexerStruct
+	{
+		[FieldOffset(0)]
+		private fixed float fields[3];
+		[FieldOffset(0)]
+		public float X;
+		[FieldOffset(4)]
+		public float Y;
+		[FieldOffset(8)]
 		public float Z;
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
