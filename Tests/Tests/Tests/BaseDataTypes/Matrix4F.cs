@@ -21,20 +21,24 @@ namespace Tests.Tests.BaseDataTypes
 		public float M43;
 		public float M44;
 
-		public static Vector3F operator *(Matrix4F m, Vector3F v)
+		public Vector3F MultiplyNoDivision(in Vector3F v)
 		{
 			return new Vector3F
 			(
-				m.M11 * v.X + m.M21 * v.Y + m.M31 * v.Z + m.M41,
-				m.M12 * v.X + m.M22 * v.Y + m.M32 * v.Z + m.M42,
-				m.M13 * v.X + m.M23 * v.Y + m.M33 * v.Z + m.M43
+				M11 * v.X + M21 * v.Y + M31 * v.Z + M41,
+				M12 * v.X + M22 * v.Y + M32 * v.Z + M42,
+				M13 * v.X + M23 * v.Y + M33 * v.Z + M43
 			);
-			float w = 1f / ((v.X * m.M14) + (v.Y * m.M24) + (v.Z * m.M34) + m.M44);
+		}
+
+		public Vector3F MultiplyWithDivision(in Vector3F v)
+		{
+			float w = 1f / ((v.X * M14) + (v.Y * M24) + (v.Z * M34) + M44);
 			return new Vector3F
 			(
-				((m.M11 * v.X + m.M21 * v.Y + m.M31 * v.Z + m.M41) * w),
-				((m.M12 * v.X + m.M22 * v.Y + m.M32 * v.Z + m.M42) * w),
-				((m.M13 * v.X + m.M23 * v.Y + m.M33 * v.Z + m.M43) * w)
+				((M11 * v.X + M21 * v.Y + M31 * v.Z + M41) * w),
+				((M12 * v.X + M22 * v.Y + M32 * v.Z + M42) * w),
+				((M13 * v.X + M23 * v.Y + M33 * v.Z + M43) * w)
 			);
 		}
 

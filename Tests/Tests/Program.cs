@@ -3,19 +3,47 @@ using System;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Jobs;
 using Tests.Tests;
+using System.Numerics;
 
 namespace Tests
 {
 	partial class Program
 	{
-        static void Main(string[] args)
+		private static readonly Matrix4x4 MatrixSimd = new Matrix4x4
 		{
-			RunHelper.CheckEnviroment();
-			RunHelper.CheckRunModeAndRequestEnter();
+			M11 = 1,
+			M12 = 0,
+			M13 = 0,
+			M14 = 0,
+			M21 = 0,
+			M22 = 1,
+			M23 = 0,
+			M24 = 0,
+			M31 = 0,
+			M32 = 0,
+			M33 = 1,
+			M34 = 0,
+			M41 = 3,
+			M42 = 4,
+			M43 = 5,
+			M44 = 4,
+		};
+
+		static void Main(string[] args)
+		{
+			//RunHelper.CheckEnviroment();
+			//RunHelper.CheckRunModeAndRequestEnter();
+
+
+			//Matrix4x4 m = MatrixSimd;
+			//Vector3 vector = new Vector3(1, 2, 3);
+			//vector = Vector3.Transform(vector, m);
 
 			// TODO: uncoment necessary test.
 			//BoolToIntConvertion();
 			//RunLazyTest();
+
+			//new FloatSummTest().Vector3ValueTypeSum();
 
 			// NEW:
 			BenchmarkRunner.Run<
@@ -33,8 +61,9 @@ namespace Tests
 				//ParralelExcutionTest
 				//ReadonlyStructTest
 				//SimdTest
-				StrucByIndexTest
-				//VectorOperationsSimdTest
+				//StrucByIndexTest
+				VectorOperationsSimdTest
+				//FloatSummTest
 				>();
 
 			Console.WriteLine("End of test.");
