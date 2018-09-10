@@ -62,7 +62,8 @@ namespace Tests
 
 				// MEASURED:
 
-				CallTest
+				OperationTests
+				//CallTest
 				//ComparationTest
 				//FloatSummTest
 				//DictionaryVsArrayTest
