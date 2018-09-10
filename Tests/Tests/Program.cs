@@ -31,6 +31,9 @@ namespace Tests
 
 		static void Main(string[] args)
 		{
+			
+
+
 			//RunHelper.CheckEnviroment();
 			//RunHelper.CheckRunModeAndRequestEnter();
 
@@ -42,9 +45,15 @@ namespace Tests
 			// TODO: uncoment necessary test.
 			//BoolToIntConvertion();
 			//RunLazyTest();
-
 			//new FloatSummTest().Vector3ValueTypeSum();
 
+
+			//new CallTest();
+			//Console.WriteLine("End of test.");
+			//Console.WriteLine("Press any key for exit.");
+			//Console.ReadLine();
+			//
+			//return;
 			// NEW:
 			BenchmarkRunner.Run<
 				// NO results
@@ -53,7 +62,7 @@ namespace Tests
 
 				// MEASURED:
 
-				//CallTest
+				CallTest
 				//ComparationTest
 				//FloatSummTest
 				//DictionaryVsArrayTest
@@ -62,7 +71,7 @@ namespace Tests
 				//ReadonlyStructTest
 				//SimdTest
 				//StrucByIndexTest
-				VectorOperationsSimdTest
+				//VectorOperationsSimdTest
 				//FloatSummTest
 				>();
 

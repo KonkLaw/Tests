@@ -1,5 +1,6 @@
 ﻿using BenchmarkDotNet.Attributes;
 using System;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
@@ -21,52 +22,127 @@ namespace Tests.Tests
 {
 	interface IFakeInterface
 	{
-		void MethodForCall();
+		int MethodForNoninlinedCall(int input);
 	}
 
 	public class CallTest : IFakeInterface
 	{
-		private readonly Action action;
-		private readonly MethodInfo methodInfo;
 		private readonly IFakeInterface interfaceRef;
+		private readonly Func<CallTest, int> function;
 
-		private int counter;
+		private readonly MethodInfo methodInfo;
+		private readonly object[] arrayCache = new object[1];
+
+		private readonly Func<CallTest, int> functionFromExpression;
+
+
+		public int Asd = 123;
+
+		object expression = (Expression<Func<CallTest, int>>)(i => i.Asd);
+		private Func<CallTest, int> expr11;
+
+		//private int counter;
 
 		public CallTest()
 		{
-			action = MethodForCall;
-			methodInfo = GetType().GetMethod(nameof(MethodForCall));
 			interfaceRef = this;
+			function = i => i.Asd;
+			methodInfo = GetType().GetMethod(nameof(MethodForCall));
+			functionFromExpression = ((Expression<Func<CallTest, int>>)expression).Compile();
+
+
+
+			var methodInfo1 = typeof(MyClass).GetMethod(nameof(MyClass.MethodForCall11));
+			ParameterExpression instance = Expression.Parameter(typeof(CallTest), "instance");
+			MethodCallExpression value = Expression.Call(methodInfo1, instance);
+			expr11 = Expression.Lambda<Func<CallTest, int>>(value, instance).Compile();
+
+			//var input = Expression.Parameter(typeof(object), "input");
+			//var method = o.GetType().GetMethod("GetName",
+			//	System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+			////you should check for null *and* make sure the return type is string here.
+			//Assert.IsFalse(method == null && !method.ReturnType.Equals(typeof(string)));
+
+
+			//now build a dynamic bit of code that does this:
+			//(object o) => ((TestType)o).GetName();
+		
+		}
+
+		//[Benchmark]
+		public int DirectCallInlined()
+		{
+			return MethodForInlinedCall(48);
+		}
+
+		//[Benchmark]
+		public int InterfaceCall()
+		{
+			return interfaceRef.MethodForNoninlinedCall(48);
 		}
 
 		[Benchmark]
-		public void DirectCall()
+		public int UsualDelegateCall()
 		{
-			MethodForCall();
+			return function(this);
 		}
 
 		[Benchmark]
-		public void InterfaceCall()
+		public int ReflectionCachedCall()
 		{
-			interfaceRef.MethodForCall();
+			arrayCache[0] = this;
+			return (int)methodInfo.Invoke(this, arrayCache);
 		}
 
 		[Benchmark]
-		public void UsualDelegateCall()
+		public int FunctionFromExpression()
 		{
-			action();
+			return functionFromExpression(this);
 		}
 
 		[Benchmark]
-		public void ReflectionCachedCall()
+		public int ReflectionAndCompiledCachedCall()
 		{
-			methodInfo.Invoke(this, null);
+			return expr11(this);
+		}
+
+
+
+
+
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		private int MethodForInlinedCall(int input)
+		{
+			return input + 1;
 		}
 
 		[MethodImpl(MethodImplOptions.NoInlining)]
-		public void MethodForCall()
+		int IFakeInterface.MethodForNoninlinedCall(int input)
 		{
-			counter++;
+			return input + 1;
+		}
+
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public int MethodForCall(CallTest input)
+		{
+			return input.Asd;
+		}
+
+		//[MethodImpl(MethodImplOptions.NoInlining)]
+		//public static int MethodForCall11(CallTest input)
+		//{
+		//	return input.Asd;
+		//}
+
+
+		public class MyClass
+		{
+			[MethodImpl(MethodImplOptions.NoInlining)]
+			public static int MethodForCall11(CallTest input)
+			{
+				return input.Asd;
+			}
 		}
 	}
 }
