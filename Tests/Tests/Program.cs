@@ -61,8 +61,8 @@ namespace Tests
 				//IntSumTest
 
 				// MEASURED:
-
-				OperationTests
+				StructPassingTests
+				//OperationTests
 				//CallTest
 				//ComparationTest
 				//FloatSummTest

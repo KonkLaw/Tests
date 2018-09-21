@@ -181,6 +181,7 @@
     <Compile Include="Tests\StrucByIndexTest.cs" />
     <Compile Include="Tests\ReadonlyStructTest.cs" />
     <Compile Include="Tests\StructInitTest.cs" />
+    <Compile Include="Tests\StructPassingTests.cs" />
     <Compile Include="Tests\VectorOperationsSimdTest.cs" />
     <Compile Include="Tests\BaseDataTypes\Vectors4.cs" />
   </ItemGroup>
