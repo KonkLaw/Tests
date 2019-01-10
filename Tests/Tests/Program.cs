@@ -74,7 +74,8 @@ namespace Tests
 				//StrucByIndexTest
 				//VectorOperationsSimdTest
 				//FloatSummTest
-				FastSqr
+				//FastSqr
+				IndexerStructTest
 				>();
 
 			Console.WriteLine("End of test.");
