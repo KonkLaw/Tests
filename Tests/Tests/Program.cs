@@ -61,7 +61,7 @@ namespace Tests
 				//IntSumTest
 
 				// MEASURED:
-				StructPassingTests
+				//StructPassingTests
 				//OperationTests
 				//CallTest
 				//ComparationTest
@@ -74,6 +74,7 @@ namespace Tests
 				//StrucByIndexTest
 				//VectorOperationsSimdTest
 				//FloatSummTest
+				FastSqr
 				>();
 
 			Console.WriteLine("End of test.");
