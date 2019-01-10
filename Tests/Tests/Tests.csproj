@@ -173,6 +173,7 @@
     <Compile Include="Tests\ArraysBoundsCheckTest.cs" />
     <Compile Include="Tests\BoolToIntConversionTest.cs" />
     <Compile Include="Tests\ComparationTest.cs" />
+    <Compile Include="Tests\IndexerStructTest.cs" />
     <Compile Include="Tests\IntSumTest.cs" />
     <Compile Include="Tests\LazyTest.cs" />
     <Compile Include="Tests\BaseDataTypes\Matrix4F.cs" />

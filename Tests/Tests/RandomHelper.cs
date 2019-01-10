@@ -66,12 +66,12 @@ namespace Tests
 			return result;
 		}
 
-		public static int[] GetIntNumbers(int numbersCount, int minValue, int maxValue)
+		public static int[] GetIntNumbers(int numbersCount, int minValue, int maxValueExclusive)
 		{
 			var result = new int[numbersCount];
 			for (int i = 0; i < result.Length; i++)
 			{
-				result[i] = Random.Next(minValue, maxValue);
+				result[i] = Random.Next(minValue, maxValueExclusive);
 			}
 			return result;
 		}
