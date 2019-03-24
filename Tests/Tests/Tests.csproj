@@ -159,33 +159,34 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Tests\FastSqr.cs" />
-    <Compile Include="Tests\FloatSummTest.cs" />
+    <Compile Include="Tests\BranchesOptimizations\CheckForNulBeforeCall.cs" />
+    <Compile Include="Tests\Computations\FastSqr.cs" />
+    <Compile Include="Tests\VectorOperations\FloatSummTest.cs" />
     <Compile Include="RunHelper.cs" />
     <Compile Include="Tests\CallTest.cs" />
-    <Compile Include="Tests\DictionaryVsArrayTest.cs" />
+    <Compile Include="Tests\CollectionsTest\DictionaryVsArrayTest.cs" />
     <Compile Include="Draft\ArglistTest.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RandomHelper.cs" />
+    <Compile Include="HelpersTypes\RandomHelper.cs" />
     <Compile Include="SickSh_tApi.cs" />
-    <Compile Include="Tests\ArraysBoundsCheckTest.cs" />
-    <Compile Include="Tests\BoolToIntConversionTest.cs" />
-    <Compile Include="Tests\ComparationTest.cs" />
-    <Compile Include="Tests\IndexerStructTest.cs" />
-    <Compile Include="Tests\IntSumTest.cs" />
-    <Compile Include="Tests\LazyTest.cs" />
-    <Compile Include="Tests\BaseDataTypes\Matrix4F.cs" />
+    <Compile Include="Tests\CollectionsTest\ArraysBoundsCheckTest.cs" />
+    <Compile Include="Tests\BranchesOptimizations\BoolToIntConversionTest.cs" />
+    <Compile Include="Tests\BranchesOptimizations\ComparationTest.cs" />
+    <Compile Include="Tests\GeneralCodeExecution\IndexerStructTest.cs" />
+    <Compile Include="Tests\VectorOperations\IntSumTest.cs" />
+    <Compile Include="Tests\GeneralCodeExecution\LazyTest.cs" />
+    <Compile Include="HelpersTypes\Matrix4F.cs" />
     <Compile Include="Tests\MatrixTest.cs" />
-    <Compile Include="Tests\OperationTests.cs" />
-    <Compile Include="Tests\ParralelExcutionTest.cs" />
-    <Compile Include="Tests\StrucByIndexTest.cs" />
+    <Compile Include="Tests\Computations\OperationTests.cs" />
+    <Compile Include="Tests\MultithreadingTest\ParralelExcutionTest.cs" />
+    <Compile Include="Tests\GeneralCodeExecution\StrucByIndexTest.cs" />
     <Compile Include="Tests\ReadonlyStructTest.cs" />
-    <Compile Include="Tests\StructInitTest.cs" />
+    <Compile Include="Tests\GeneralCodeExecution\StructInitTest.cs" />
     <Compile Include="Tests\StructPassingTests.cs" />
-    <Compile Include="Tests\VectorOperationsSimdTest.cs" />
-    <Compile Include="Tests\BaseDataTypes\Vectors4.cs" />
+    <Compile Include="Tests\VectorOperations\VectorOperationsSimdTest.cs" />
+    <Compile Include="HelpersTypes\Vectors4.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Tests.Tests.BaseDataTypes
+namespace Tests.BaseDataTypes
 {
 	public struct Matrix4F
 	{

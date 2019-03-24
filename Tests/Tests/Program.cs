@@ -1,41 +1,18 @@
-﻿using BenchmarkDotNet.Running;
-using System;
-using BenchmarkDotNet.Configs;
-using BenchmarkDotNet.Jobs;
+﻿using System;
 using Tests.Tests;
 using System.Numerics;
+using BenchmarkDotNet.Running;
+using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Jobs;
 
 namespace Tests
 {
 	partial class Program
 	{
-		private static readonly Matrix4x4 MatrixSimd = new Matrix4x4
-		{
-			M11 = 1,
-			M12 = 0,
-			M13 = 0,
-			M14 = 0,
-			M21 = 0,
-			M22 = 1,
-			M23 = 0,
-			M24 = 0,
-			M31 = 0,
-			M32 = 0,
-			M33 = 1,
-			M34 = 0,
-			M41 = 3,
-			M42 = 4,
-			M43 = 5,
-			M44 = 4,
-		};
-
 		static void Main(string[] args)
 		{
-			
-
-
-			//RunHelper.CheckEnviroment();
-			//RunHelper.CheckRunModeAndRequestEnter();
+			RunHelper.CheckEnviroment();
+			RunHelper.CheckRunModeAndRequestEnter();
 
 
 			//Matrix4x4 m = MatrixSimd;
@@ -75,7 +52,9 @@ namespace Tests
 				//VectorOperationsSimdTest
 				//FloatSummTest
 				//FastSqr
-				IndexerStructTest
+				//IndexerStructTest
+				//BoolToIntConversionTest
+				CheckForNulBeforeCall
 				>();
 
 			Console.WriteLine("End of test.");

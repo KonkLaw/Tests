@@ -1,6 +1,4 @@
-using System.Runtime.InteropServices;
-
-namespace Tests.Tests.BaseDataTypes
+namespace Tests.BaseDataTypes
 {
 	public class Vector4FRef
 	{

@@ -11,6 +11,7 @@
 
 using System.CodeDom;
 using BenchmarkDotNet.Attributes;
+using Tests.HelpersTypes;
 
 namespace Tests.Tests
 {

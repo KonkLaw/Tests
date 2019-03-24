@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using BenchmarkDotNet.Attributes;
+using Tests.HelpersTypes;
 
 
 //	BenchmarkDotNet=v0.10.7, OS=Windows 10.0.17134

@@ -1,6 +1,7 @@
 ﻿using BenchmarkDotNet.Attributes;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using Tests.HelpersTypes;
 
 //BenchmarkDotNet=v0.10.7, OS=Windows 10.0.17134
 //Processor=Intel Core i5-3210M CPU 2.50GHz(Ivy Bridge), ProcessorCount=4
