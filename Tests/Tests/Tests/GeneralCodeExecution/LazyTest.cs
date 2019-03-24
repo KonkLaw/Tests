@@ -1,5 +1,6 @@
 ﻿using System;
 using BenchmarkDotNet.Attributes;
+using Tests.HelpersTypes;
 
 namespace Tests.Tests
 {

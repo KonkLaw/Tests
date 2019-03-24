@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
 using BenchmarkDotNet.Attributes;
-using Tests.Tests.BaseDataTypes;
+using Tests.BaseDataTypes;
+using Tests.HelpersTypes;
 
 //              Method |       Mean |     Error |    StdDev |
 //---------------------|-----------:|----------:|----------:|

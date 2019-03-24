@@ -1,7 +1,7 @@
 ﻿using System;
-using Tests.Tests.BaseDataTypes;
+using Tests.BaseDataTypes;
 
-namespace Tests
+namespace Tests.HelpersTypes
 {
     class RandomHelper
     {

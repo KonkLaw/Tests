@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using BenchmarkDotNet.Attributes;
-using Tests.Tests.BaseDataTypes;
+using Tests.BaseDataTypes;
+using Tests.HelpersTypes;
 
 //	BenchmarkDotNet=v0.10.7, OS=Windows 10.0.17134
 //	Processor=Intel Core i7-8700K CPU 3.70GHz, ProcessorCount=12

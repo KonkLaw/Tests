@@ -1,5 +1,5 @@
 ﻿using BenchmarkDotNet.Attributes;
-using Tests.Tests.BaseDataTypes;
+using Tests.BaseDataTypes;
 
 namespace Tests.Tests
 {
