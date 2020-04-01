@@ -88,8 +88,9 @@ namespace Tests.HelpersTypes
 			return result;
 		}
 
+		public static T GetByRandom<T>(Func<T>[] factories) => factories[Random.Next(0, factories.Length)]();
 
-        public static int[] GenerateRandomSequence_FisherYatesShuffle(int maxExclusive)
+		public static int[] GenerateRandomSequence_FisherYatesShuffle(int maxExclusive)
         {
             var numbers = new int[maxExclusive - 1];
             for (int i = 0; i < numbers.Length; i++)
