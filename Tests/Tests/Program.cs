@@ -9,7 +9,7 @@ namespace Tests
 {
 	partial class Program
 	{
-		static void Main(string[] args)
+		static void Main()
 		{
 			RunHelper.CheckEnviroment();
 			RunHelper.CheckRunModeAndRequestEnter();
@@ -54,7 +54,9 @@ namespace Tests
 				//FastSqr
 				//IndexerStructTest
 				//BoolToIntConversionTest
-				CheckForNulBeforeCall
+				//CheckForNulBeforeCall
+				//OneCallTest
+				MultimpleCall
 				>();
 
 			Console.WriteLine("End of test.");
@@ -62,7 +64,7 @@ namespace Tests
 			Console.ReadLine();
 		}
 
-
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "<Pending>")]
 		private static void BoolToIntConvertion()
 		{
 			//new BoolToIntConversionTest().Test1();
@@ -72,6 +74,7 @@ namespace Tests
 			BenchmarkRunner.Run<BoolToIntConversionTest>();
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "<Pending>")]
 		private static void RunLazyTest()
 		{
 			BenchmarkRunner.Run<LazyTest>(

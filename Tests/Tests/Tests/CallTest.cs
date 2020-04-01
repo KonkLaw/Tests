@@ -1,148 +1,308 @@
-﻿using BenchmarkDotNet.Attributes;
+﻿//BenchmarkDotNet=v0.10.7, OS=Windows 10.0.18363
+//Processor=Intel Core i7-8750H CPU 2.20GHz, ProcessorCount=12
+//Frequency=10000000 Hz, Resolution=100.0000 ns, Timer=UNKNOWN
+//  [Host]     : Clr 4.0.30319.42000, 64bit RyuJIT-v4.8.4150.0
+//  DefaultJob : Clr 4.0.30319.42000, 64bit RyuJIT-v4.8.4150.0
+
+
+//BenchmarkDotNet=v0.10.7, OS=Windows 10.0.18363
+//Processor=Intel Core i7-8750H CPU 2.20GHz, ProcessorCount=12
+//Frequency=10000000 Hz, Resolution=100.0000 ns, Timer=UNKNOWN
+//  [Host]     : Clr 4.0.30319.42000, 64bit RyuJIT-v4.8.4150.0
+//  DefaultJob : Clr 4.0.30319.42000, 64bit RyuJIT-v4.8.4150.0
+
+//                         Method |      Mean |     Error |    StdDev |
+//------------------------------- |----------:|----------:|----------:|
+//                       Inlining | 0.0000 ns | 0.0000 ns | 0.0000 ns |
+//                     NoInlining | 0.9535 ns | 0.0063 ns | 0.0056 ns |
+//             AbstractMethodThis | 0.7346 ns | 0.0064 ns | 0.0059 ns |
+//              InterfaceFromThis | 1.2313 ns | 0.0052 ns | 0.0049 ns |
+//            AbstractMethodOther | 0.7371 ns | 0.0043 ns | 0.0036 ns |
+//             InterfaceFromOther | 1.2081 ns | 0.0067 ns | 0.0063 ns |
+//                 DelegateSimple | 0.9548 ns | 0.0018 ns | 0.0015 ns |
+// DelegateFromCompiledExpression | 0.7334 ns | 0.0097 ns | 0.0081 ns |
+//   DelegateFromManualExpression | 0.7292 ns | 0.0013 ns | 0.0011 ns |
+	
+//     REFLECTION IS APPROXIMATLY 200 times slowwer than delegate
+
+using BenchmarkDotNet.Attributes;
 using System;
 using System.Linq.Expressions;
-using System.Reflection;
 using System.Runtime.CompilerServices;
-
-//BenchmarkDotNet=v0.10.7, OS=Windows 10 Redstone 2 (10.0.15063)
-//Processor=Intel Core i5-3210M CPU 2.50GHz(Ivy Bridge), ProcessorCount=4
-//Frequency=2435880 Hz, Resolution=410.5293 ns, Timer=TSC
-//  [Host]     : Clr 4.0.30319.42000, 64bit RyuJIT-v4.7.2101.1
-//  DefaultJob : Clr 4.0.30319.42000, 64bit RyuJIT-v4.7.2101.1
-//
-//
-//               Method |       Mean |     Error |    StdDev |
-//--------------------- |-----------:|----------:|----------:|
-//           DirectCall |   1.306 ns | 0.0621 ns | 0.0519 ns |
-//        InterfaceCall |   2.141 ns | 0.0062 ns | 0.0089 ns |
-//    UsualDelegateCall |   1.316 ns | 0.0405 ns | 0.0379 ns |
-// ReflectionCachedCall | 195.485 ns | 3.2107 ns | 2.6811 ns |
+using Tests.HelpersTypes;
 
 namespace Tests.Tests
 {
-	interface IFakeInterface
+	public interface IFakeInterface
 	{
-		int MethodForNoninlinedCall(int input);
+		int InterfaceMethod(int input);
 	}
 
-	public class CallTest : IFakeInterface
+	public abstract class BaseClass
 	{
-		private readonly IFakeInterface interfaceRef;
-		private readonly Func<CallTest, int> function;
+		public abstract int AbstractCall(int input);
+	}
 
-		private readonly MethodInfo methodInfo;
-		private readonly object[] arrayCache = new object[1];
+	public class FakeClass : BaseClass, IFakeInterface
+	{
+		public override int AbstractCall(int input) => input + 1;
 
-		private readonly Func<CallTest, int> functionFromExpression;
+		public int InterfaceMethod(int input) => input + 1;
+	}
 
+	public class OneCallTest : BaseClass, IFakeInterface
+	{
+		private readonly object expression = (Expression<Func<int, int>>)(i => i + 1);
+#pragma warning disable IDE0044 // Add readonly modifier
+		private IFakeInterface interfacePointerThis;
+		private BaseClass abstractOther;
+		private IFakeInterface interfacePointerOther;
+		private Func<int, int> delegateSimple;
+		private Func<int, int> delegateFromExpression;
+		private Func<int, int> delegateFromManualExpression;
+#pragma warning restore IDE0044 // Add readonly modifier
 
-		public int Asd = 123;
-
-		object expression = (Expression<Func<CallTest, int>>)(i => i.Asd);
-		private Func<CallTest, int> expr11;
-
-		//private int counter;
-
-		public CallTest()
+		public OneCallTest()
 		{
-			interfaceRef = this;
-			function = i => i.Asd;
-			methodInfo = GetType().GetMethod(nameof(MethodForCall));
-			functionFromExpression = ((Expression<Func<CallTest, int>>)expression).Compile();
+			interfacePointerThis = this;
+			abstractOther = new FakeClass();
+			interfacePointerOther = new FakeClass();
+			delegateSimple = MethodWithoutInlining;
+			delegateFromExpression = ((Expression<Func<int, int>>)expression).Compile();
 
-
-
-			var methodInfo1 = typeof(MyClass).GetMethod(nameof(MyClass.MethodForCall11));
-			ParameterExpression instance = Expression.Parameter(typeof(CallTest), "instance");
-			MethodCallExpression value = Expression.Call(methodInfo1, instance);
-			expr11 = Expression.Lambda<Func<CallTest, int>>(value, instance).Compile();
-
-			//var input = Expression.Parameter(typeof(object), "input");
-			//var method = o.GetType().GetMethod("GetName",
-			//	System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
-			////you should check for null *and* make sure the return type is string here.
-			//Assert.IsFalse(method == null && !method.ReturnType.Equals(typeof(string)));
-
-
-			//now build a dynamic bit of code that does this:
-			//(object o) => ((TestType)o).GetName();
-		
-		}
-
-		//[Benchmark]
-		public int DirectCallInlined()
-		{
-			return MethodForInlinedCall(48);
-		}
-
-		//[Benchmark]
-		public int InterfaceCall()
-		{
-			return interfaceRef.MethodForNoninlinedCall(48);
+			ParameterExpression parameter1 = Expression.Parameter(typeof(int), "parameter1");
+			Expression sumExpr = Expression.Add(parameter1, Expression.Constant(1));
+			delegateFromManualExpression = Expression.Lambda<Func<int, int>>(sumExpr, parameter1).Compile();
 		}
 
 		[Benchmark]
-		public int UsualDelegateCall()
+		public int Inlining()
 		{
-			return function(this);
+			return MethodWithInlining(48);
 		}
 
 		[Benchmark]
-		public int ReflectionCachedCall()
+		public int NoInlining()
 		{
-			arrayCache[0] = this;
-			return (int)methodInfo.Invoke(this, arrayCache);
+			return MethodWithoutInlining(48);
 		}
 
 		[Benchmark]
-		public int FunctionFromExpression()
+		public int AbstractMethodThis()
 		{
-			return functionFromExpression(this);
+			return AbstractCall(48);
 		}
 
 		[Benchmark]
-		public int ReflectionAndCompiledCachedCall()
+		public int InterfaceFromThis()
 		{
-			return expr11(this);
+			return interfacePointerThis.InterfaceMethod(48);
 		}
 
+		[Benchmark]
+		public int AbstractMethodOther()
+		{
+			return abstractOther.AbstractCall(48);
+		}
 
+		[Benchmark]
+		public int InterfaceFromOther()
+		{
+			return interfacePointerOther.InterfaceMethod(48);
+		}
 
+		[Benchmark]
+		public int DelegateSimple()
+		{
+			return delegateSimple(48);
+		}
+
+		[Benchmark]
+		public int DelegateFromCompiledExpression()
+		{
+			return delegateFromExpression(48);
+		}
+
+		[Benchmark]
+		public int DelegateFromManualExpression()
+		{
+			return delegateFromManualExpression(48);
+		}
 
 
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		private int MethodForInlinedCall(int input)
+		private int MethodWithInlining(int input)
 		{
 			return input + 1;
 		}
 
 		[MethodImpl(MethodImplOptions.NoInlining)]
-		int IFakeInterface.MethodForNoninlinedCall(int input)
+		private int MethodWithoutInlining(int input)
 		{
 			return input + 1;
 		}
 
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		public int MethodForCall(CallTest input)
+		public override int AbstractCall(int input)
 		{
-			return input.Asd;
+			return input + 1;
 		}
 
-		//[MethodImpl(MethodImplOptions.NoInlining)]
-		//public static int MethodForCall11(CallTest input)
-		//{
-		//	return input.Asd;
-		//}
-
-
-		public class MyClass
+		public int InterfaceMethod(int input)
 		{
-			[MethodImpl(MethodImplOptions.NoInlining)]
-			public static int MethodForCall11(CallTest input)
+			return input + 1;
+		}
+	}
+
+
+	public class Class1 : BaseClass, IFakeInterface
+	{
+		public override int AbstractCall(int input) => input + 1;
+		public int InterfaceMethod(int input) => input + 1;
+	}
+
+	public class Class2 : BaseClass, IFakeInterface
+	{
+		public override int AbstractCall(int input) => input + 1;
+		public int InterfaceMethod(int input) => input + 1;
+	}
+
+	public class Class3 : BaseClass, IFakeInterface
+	{
+		public override int AbstractCall(int input) => input + 1;
+		public int InterfaceMethod(int input) => input + 1;
+	}
+
+	public class Class4 : BaseClass, IFakeInterface
+	{
+		public override int AbstractCall(int input) => input + 1;
+		public int InterfaceMethod(int input) => input + 1;
+	}
+
+	public class Class5 : BaseClass, IFakeInterface
+	{
+		public override int AbstractCall(int input) => input + 1;
+		public int InterfaceMethod(int input) => input + 1;
+	}
+
+
+//	BenchmarkDotNet=v0.10.7, OS=Windows 10.0.18363
+//Processor=Intel Core i7-8750H CPU 2.20GHz, ProcessorCount=12
+//Frequency=10000000 Hz, Resolution=100.0000 ns, Timer=UNKNOWN
+//  [Host]     : Clr 4.0.30319.42000, 64bit RyuJIT-v4.8.4150.0
+//  DefaultJob : Clr 4.0.30319.42000, 64bit RyuJIT-v4.8.4150.0
+
+
+//        Method |      Mean |     Error |    StdDev |
+//-------------- |----------:|----------:|----------:|
+//  AbstractCall |  9.737 ms | 0.0363 ms | 0.0340 ms |
+// InterfaceCall | 11.278 ms | 0.0163 ms | 0.0144 ms |
+//  DelegateCall |  9.973 ms | 0.0307 ms | 0.0287 ms |
+
+	public class MultimpleCall
+	{
+		private const int RunCount = 1_000_000;
+		private const int SamplesCount = 5;
+
+		private readonly BaseClass[] abstractArray;
+		private readonly IFakeInterface[] interafceArray;
+		private readonly Func<int, int>[] delegateArray;
+
+		public MultimpleCall()
+		{
+			abstractArray = GetArrayFroAbstract();
+			interafceArray = GetArrayFroInterface();
+			delegateArray = GetArrayFroDelegates();
+		}
+
+		BaseClass[] GetArrayFroAbstract()
+		{
+			Func<BaseClass>[] factories = new Func<BaseClass>[SamplesCount]
 			{
-				return input.Asd;
+				() => new Class1(),
+				() => new Class2(),
+				() => new Class3(),
+				() => new Class4(),
+				() => new Class5(),
+			};
+
+			var result = new BaseClass[RunCount];
+			for (int i = 0; i < result.Length; i++)
+			{
+				result[i] = RandomHelper.GetByRandom(factories);
+			}
+			return result;
+		}
+
+		IFakeInterface[] GetArrayFroInterface()
+		{
+			Func<IFakeInterface>[] factories = new Func<IFakeInterface>[SamplesCount]
+			{
+				() => new Class1(),
+				() => new Class2(),
+				() => new Class3(),
+				() => new Class4(),
+				() => new Class5(),
+			};
+
+			var result = new IFakeInterface[RunCount];
+			for (int i = 0; i < result.Length; i++)
+			{
+				result[i] = RandomHelper.GetByRandom(factories);
+			}
+			return result;
+		}
+
+		Func<int, int>[] GetArrayFroDelegates()
+		{
+			Func<Func<int, int>>[] factories = new Func<Func<int, int>>[SamplesCount]
+			{
+				() => new Func<int, int>(MethodForDelegate1),
+				() => new Func<int, int>(MethodForDelegate2),
+				() => new Func<int, int>(MethodForDelegate3),
+				() => new Func<int, int>(MethodForDelegate4),
+				() => new Func<int, int>(MethodForDelegate5),
+			};
+
+			var result = new Func<int, int>[RunCount];
+			for (int i = 0; i < result.Length; i++)
+			{
+				result[i] = RandomHelper.GetByRandom(factories);
+			}
+			return result;
+		}
+
+		[Benchmark]
+		public void AbstractCall()
+		{
+			for (int i = 0; i < RunCount; i++)
+			{
+				abstractArray[i].AbstractCall(48);
 			}
 		}
+
+		[Benchmark]
+		public void InterfaceCall()
+		{
+			for (int i = 0; i < RunCount; i++)
+			{
+				interafceArray[i].InterfaceMethod(48);
+			}
+		}
+
+		[Benchmark]
+		public void DelegateCall()
+		{
+			for (int i = 0; i < RunCount; i++)
+			{
+				delegateArray[i](48);
+			}
+		}
+
+		private int MethodForDelegate1(int input) => input + 1;
+		private int MethodForDelegate2(int input) => input + 1;
+		private int MethodForDelegate3(int input) => input + 1;
+		private int MethodForDelegate4(int input) => input + 1;
+		private int MethodForDelegate5(int input) => input + 1;
 	}
 }
