@@ -55,8 +55,8 @@ namespace Tests
 				//IndexerStructTest
 				//BoolToIntConversionTest
 				//CheckForNulBeforeCall
-				//OneCallTest
-				MultimpleCall
+				OneCallTest
+				//MultimpleCall
 				>();
 
 			Console.WriteLine("End of test.");
