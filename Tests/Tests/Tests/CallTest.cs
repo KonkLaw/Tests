@@ -25,6 +25,26 @@
 	
 //     REFLECTION IS APPROXIMATLY 200 times slowwer than delegate
 
+
+//BenchmarkDotNet=v0.10.7, OS=Windows 10.0.18362
+//Processor=Intel Core i7-8700K CPU 3.70GHz, ProcessorCount=12
+//Frequency=10000000 Hz, Resolution=100.0000 ns, Timer=UNKNOWN
+//[Host]     : Clr 4.0.30319.42000, 64bit RyuJIT-v4.8.4121.0
+//DefaultJob : Clr 4.0.30319.42000, 64bit RyuJIT-v4.8.4121.0
+
+
+//						  Method |      Mean |     Error |    StdDev |
+//-------------------------------|----------:|----------:|----------:|
+//						Inlining | 0.0000 ns | 0.0000 ns | 0.0000 ns |
+//					  NoInlining | 0.8755 ns | 0.0203 ns | 0.0190 ns |
+//			  AbstractMethodThis | 0.6544 ns | 0.0195 ns | 0.0152 ns |
+//			   InterfaceFromThis | 1.1019 ns | 0.0101 ns | 0.0094 ns |
+//			 AbstractMethodOther | 0.6661 ns | 0.0076 ns | 0.0055 ns |
+//			  InterfaceFromOther | 1.1076 ns | 0.0256 ns | 0.0200 ns |
+//				  DelegateSimple | 0.8755 ns | 0.0260 ns | 0.0217 ns |
+//DelegateFromCompiledExpression | 0.6816 ns | 0.0108 ns | 0.0090 ns |
+//  DelegateFromManualExpression | 0.6664 ns | 0.0115 ns | 0.0096 ns |
+
 using BenchmarkDotNet.Attributes;
 using System;
 using System.Linq.Expressions;
@@ -192,12 +212,25 @@ namespace Tests.Tests
 //  [Host]     : Clr 4.0.30319.42000, 64bit RyuJIT-v4.8.4150.0
 //  DefaultJob : Clr 4.0.30319.42000, 64bit RyuJIT-v4.8.4150.0
 
-
 //        Method |      Mean |     Error |    StdDev |
 //-------------- |----------:|----------:|----------:|
 //  AbstractCall |  9.737 ms | 0.0363 ms | 0.0340 ms |
 // InterfaceCall | 11.278 ms | 0.0163 ms | 0.0144 ms |
 //  DelegateCall |  9.973 ms | 0.0307 ms | 0.0287 ms |
+
+
+
+//BenchmarkDotNet=v0.10.7, OS=Windows 10.0.18362
+//Processor=Intel Core i7-8700K CPU 3.70GHz, ProcessorCount=12
+//Frequency=10000000 Hz, Resolution=100.0000 ns, Timer=UNKNOWN
+//[Host]     : Clr 4.0.30319.42000, 64bit RyuJIT-v4.8.4121.0
+//DefaultJob : Clr 4.0.30319.42000, 64bit RyuJIT-v4.8.4121.0
+
+//	      Method |     Mean |     Error |    StdDev |
+//-------------- |---------:|----------:|----------:|
+//	AbstractCall | 8.560 ms | 0.0665 ms | 0.0519 ms |
+// InterfaceCall | 9.926 ms | 0.0420 ms | 0.0372 ms |
+//  DelegateCall | 8.757 ms | 0.1688 ms | 0.2253 ms |
 
 	public class MultimpleCall
 	{
