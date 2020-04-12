@@ -160,6 +160,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Tests\BranchesOptimizations\CheckForNulBeforeCall.cs" />
+    <Compile Include="Tests\BranchesOptimizations\InIfTest.cs" />
     <Compile Include="Tests\Computations\FastSqr.cs" />
     <Compile Include="Tests\VectorOperations\FloatSummTest.cs" />
     <Compile Include="RunHelper.cs" />
