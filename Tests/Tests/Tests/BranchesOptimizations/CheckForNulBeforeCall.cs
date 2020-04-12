@@ -1,5 +1,6 @@
 ﻿using BenchmarkDotNet.Attributes;
 using System;
+#pragma warning disable 649
 
 //BenchmarkDotNet=v0.10.7, OS=Windows 10.0.17134
 //Processor=Intel Core i7-8750H CPU 2.20GHz, ProcessorCount=12

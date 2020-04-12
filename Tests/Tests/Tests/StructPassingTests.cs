@@ -1,5 +1,6 @@
 ﻿using System;
 using BenchmarkDotNet.Attributes;
+#pragma warning disable 414
 
 namespace Tests.Tests
 {
