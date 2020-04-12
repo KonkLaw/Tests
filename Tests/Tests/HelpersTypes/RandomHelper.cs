@@ -66,17 +66,19 @@ namespace Tests.HelpersTypes
 			return result;
 		}
 
-		public static int[] GetIntNumbers(int numbersCount, int minValue, int maxValueExclusive)
+		public static int[] GetIntNumbers(int numbersCount, int minValueInclusive, int maxValueExclusive)
 		{
 			var result = new int[numbersCount];
 			for (int i = 0; i < result.Length; i++)
 			{
-				result[i] = Random.Next(minValue, maxValueExclusive);
+				result[i] = Random.Next(minValueInclusive, maxValueExclusive);
 			}
 			return result;
 		}
 
-	    public static bool GetRandomBool() => Random.Next() % 2 == 0;
+		public static int GetIntNumber(int minValueInclusive, int maxValueExclusive) => Random.Next(minValueInclusive, maxValueExclusive);
+
+		public static bool GetRandomBool() => Random.Next() % 2 == 0;
 	    	
 		public static bool[] GetBooleans(int numbersCount)
 		{

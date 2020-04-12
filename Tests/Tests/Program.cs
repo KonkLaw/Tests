@@ -1,9 +1,9 @@
 ﻿using System;
 using Tests.Tests;
-using System.Numerics;
 using BenchmarkDotNet.Running;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Jobs;
+using Tests.Tests.BranchesOptimizations;
 
 namespace Tests
 {
@@ -11,6 +11,13 @@ namespace Tests
 	{
 		static void Main()
 		{
+			var qwe = new InIfTest();
+			qwe.ShortCheck_For5();
+			qwe.FullCheck_For5();
+			qwe.ShortCheck_For2();
+			qwe.FullCheck_For2();
+			qwe.ShortCheck_For3();
+			qwe.FullCheck_For3();
 			RunHelper.CheckEnviroment();
 			RunHelper.CheckRunModeAndRequestEnter();
 
@@ -56,7 +63,8 @@ namespace Tests
 				//BoolToIntConversionTest
 				//CheckForNulBeforeCall
 				//OneCallTest
-				MultimpleCall
+				//MultimpleCall
+				InIfTest
 				>();
 
 			Console.WriteLine("End of test.");
