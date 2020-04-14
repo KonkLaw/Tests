@@ -11,13 +11,6 @@ namespace Tests
 	{
 		static void Main()
 		{
-			var qwe = new InIfTest();
-			qwe.ShortCheck_For5();
-			qwe.FullCheck_For5();
-			qwe.ShortCheck_For2();
-			qwe.FullCheck_For2();
-			qwe.ShortCheck_For3();
-			qwe.FullCheck_For3();
 			RunHelper.CheckEnviroment();
 			RunHelper.CheckRunModeAndRequestEnter();
 
