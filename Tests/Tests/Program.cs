@@ -14,7 +14,7 @@ namespace Tests
 			RunHelper.CheckEnviroment();
 			RunHelper.CheckRunModeAndRequestEnter();
 
-
+			
 			//Matrix4x4 m = MatrixSimd;
 			//Vector3 vector = new Vector3(1, 2, 3);
 			//vector = Vector3.Transform(vector, m);
@@ -57,7 +57,8 @@ namespace Tests
 				//CheckForNulBeforeCall
 				//OneCallTest
 				//MultimpleCall
-				InIfTest
+				//InIfTest
+				TypeCast
 				>();
 
 			Console.WriteLine("End of test.");
