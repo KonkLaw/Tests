@@ -58,7 +58,8 @@ namespace Tests
 				//OneCallTest
 				//MultimpleCall
 				//InIfTest
-				TypeCast
+				//TypeCast
+				MathOperationsTest
 				>();
 
 			Console.WriteLine("End of test.");
