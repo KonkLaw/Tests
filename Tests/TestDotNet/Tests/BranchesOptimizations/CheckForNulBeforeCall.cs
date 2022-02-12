@@ -24,7 +24,7 @@ public class CheckForNulBeforeCall
     class SomeClass { }
 
     private readonly Action<SomeClass> readonlyActionNoAction;
-    private Action<SomeClass> actionNoAction;
+    private Action<SomeClass>? actionNoAction;
     private readonly Action<SomeClass> readonlyAction;
     private Action<SomeClass> action;
     private SomeClass ptr;

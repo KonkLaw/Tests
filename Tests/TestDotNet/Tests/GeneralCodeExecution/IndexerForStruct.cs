@@ -167,7 +167,7 @@ public class IndexerForStruct
     public int Get_RawIndex()
     {
         counter++;
-        counter = counter & Size;
+        counter &= Size;
         return data[counter];
     }
 
@@ -175,7 +175,7 @@ public class IndexerForStruct
     public float GetByArray()
     {
         counter++;
-        counter = counter & Size;
+        counter &= Size;
         return s1[data[counter]];
     }
 
@@ -183,7 +183,7 @@ public class IndexerForStruct
     public float GetByBranching()
     {
         counter++;
-        counter = counter & Size;
+        counter &= Size;
         return s2[data[counter]];
     }
 
@@ -191,7 +191,7 @@ public class IndexerForStruct
     public float GetByPointer()
     {
         counter++;
-        counter = counter & Size;
+        counter &= Size;
         return s3[data[counter]];
     }
     
@@ -199,7 +199,7 @@ public class IndexerForStruct
     public float GetByArraySafe()
     {
         counter++;
-        counter = counter & Size;
+        counter &= Size;
         return s4[data[counter]];
     }
 }

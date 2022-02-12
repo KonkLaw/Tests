@@ -93,8 +93,10 @@ public class TypeCast
     [Benchmark]
     public void Increment_StructNonGeneric_Inline()
     {
-        Mapper2 m = new Mapper2();
-        m.Base = inst;
+        Mapper2 m = new Mapper2
+        {
+            Base = inst
+        };
         m.Der.IncrimentInlineDer();
     }
 

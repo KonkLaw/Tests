@@ -128,7 +128,7 @@ namespace TestDotNet.Tests.CollectionsTest
         public int Value;
 
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             // shouldn't be called
             throw new NotImplementedException();
