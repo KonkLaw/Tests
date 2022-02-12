@@ -1,11 +1,10 @@
 ﻿using BenchmarkDotNet.Running;
-using TestDotNet.Tests;
 using TestDotNet.Utils;
 
 RunHelper.CheckEnviroment();
 RunHelper.CheckRunModeAndRequestEnter();
 
-BenchmarkRunner.Run<TypeCast>();
+BenchmarkRunner.Run<TestDotNet.Tests.GeneralCodeExecution.IndexerForStruct>();
 
 Console.WriteLine("End of test.");
 Console.WriteLine("Press any key for exit.");
