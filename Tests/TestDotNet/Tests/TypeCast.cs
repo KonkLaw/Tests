@@ -25,11 +25,12 @@ using BenchmarkDotNet.Attributes;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+
 namespace TestDotNet.Tests;
 
 public class TypeCast
 {
-    private const int RunCount = 1_000_000;
     public BaseClass inst = new DerClass();
 
     [Benchmark]
@@ -103,8 +104,10 @@ public class TypeCast
     [Benchmark]
     public void Increment_StructNonGeneric_NoInline()
     {
-        Mapper2 m = new Mapper2();
-        m.Base = inst;
+        Mapper2 m = new Mapper2
+        {
+            Base = inst
+        };
         m.Der.IncrimentNoInlineDer();
     }
 
@@ -192,3 +195,5 @@ public class TypeCast
         public DerClass Der;
     }
 }
+
+#pragma warning restore CS8602 // Dereference of a possibly null reference.

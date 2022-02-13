@@ -1,5 +1,10 @@
-﻿using BenchmarkDotNet.Attributes;
-#pragma warning disable 649
+﻿//Top of the script
+#pragma warning disable 0649
+
+using BenchmarkDotNet.Attributes;
+using System.Runtime.CompilerServices;
+
+
 
 //BenchmarkDotNet=v0.10.7, OS=Windows 10.0.17134
 //Processor=Intel Core i7-8750H CPU 2.20GHz, ProcessorCount=12
@@ -19,15 +24,24 @@
 
 namespace TestDotNet.Tests.BranchesOptimizations;
 
+
+#pragma warning disable IDE1005 // Delegate invocation can be simplified.
+
+#pragma warning disable IDE0079
+
 public class CheckForNulBeforeCall
 {
     class SomeClass { }
+#pragma warning disable CS0648 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    private readonly Action<SomeClass>? readonlyActionNoAction;
+#pragma warning restore CS0648
 
-    private readonly Action<SomeClass> readonlyActionNoAction;
-    private Action<SomeClass>? actionNoAction;
+#pragma warning disable CS0648 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    private readonly Action<SomeClass>? actionNoAction;
+#pragma warning restore CS0648
     private readonly Action<SomeClass> readonlyAction;
-    private Action<SomeClass> action;
-    private SomeClass ptr;
+    private readonly Action<SomeClass> action;
+    private readonly SomeClass ptr;
 
     public CheckForNulBeforeCall()
     {
@@ -40,7 +54,7 @@ public class CheckForNulBeforeCall
     public void ReadonlyNotCalled()
     {
         if (readonlyActionNoAction != null)
-            readonlyAction(ptr);
+            readonlyActionNoAction(ptr);
     }
 
     [Benchmark]
@@ -65,7 +79,9 @@ public class CheckForNulBeforeCall
     }
 
     [Benchmark]
+#pragma warning disable CA1822 // Mark members as static
     public void Empty()
+#pragma warning restore CA1822 // Mark members as static
     {
 
     }
@@ -75,3 +91,7 @@ public class CheckForNulBeforeCall
 
     }
 }
+
+
+#pragma warning restore IDE1005 // Delegate invocation can be simplified.
+#pragma warning restore IDE0079

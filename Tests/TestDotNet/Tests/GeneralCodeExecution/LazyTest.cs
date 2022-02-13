@@ -5,13 +5,15 @@ namespace TestDotNet.Tests.GeneralCodeExecution;
 
 public class LazyDirect<T>
 {
-    private Func<T> creator;
+    private Func<T>? creator;
     private Func<T> getter;
     private T value;
 
     public T Value => getter();
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     public LazyDirect(Func<T> creator)
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     {
         this.creator = creator ?? throw new ArgumentNullException(nameof(creator)); ;
         getter = FirstCreator;
@@ -19,7 +21,7 @@ public class LazyDirect<T>
 
     private T FirstCreator()
     {
-        value = creator();
+        value = creator!();
         creator = null;
         getter = DirectValueGetter;
         return value;
@@ -31,7 +33,7 @@ public class LazyDirect<T>
 public class LazyCond<T>
 {
     private bool inited;
-    private Func<T> creator;
+    private Func<T>? creator;
     private T value;
 
     public T Value
@@ -40,7 +42,7 @@ public class LazyCond<T>
         {
             if (!inited)
             {
-                value = creator();
+                value = creator!();
                 creator = null;
                 inited = true;
             }
@@ -50,7 +52,9 @@ public class LazyCond<T>
 
     public bool HasValue => creator == null;
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     public LazyCond(Func<T> creator)
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     {
         inited = false;
         this.creator = creator ?? throw new ArgumentNullException(nameof(creator));
@@ -62,8 +66,10 @@ public class LazyTest
     private int directIndex = -1;
     private int condIndex = -1;
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     private LazyDirect<int>[] lazy1;
     private LazyCond<int>[] lazy2;
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
     private const int CountTest = 2000000;
 
@@ -108,7 +114,7 @@ public class LazyTest
         return _arr[index - 2].Value + _arr[index - 1].Value;
     }
 
-    public void Run()
+    public static void Run()
     {
         var l = new LazyDirect<int>(() => 3);
         var tt = l.Value;
