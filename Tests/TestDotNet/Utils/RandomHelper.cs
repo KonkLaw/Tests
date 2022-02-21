@@ -6,7 +6,7 @@ class RandomHelper
 
     public static float GetFloat()
     {
-        return Random.Next() / (1.0f / int.MaxValue);
+        return Random.NextSingle();
     }
 
     public static float[] GetFloatNumbers(int numbersCount)
