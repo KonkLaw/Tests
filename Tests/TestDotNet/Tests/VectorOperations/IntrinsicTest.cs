@@ -13,16 +13,15 @@ using TestDotNet.Utils;
 
 //|                  Method |      Mean |     Error |    StdDev |
 //|------------------------ |----------:| ----------:| ----------:|
-//| Indexer                 | 0.9562 ns | 0.0085 ns | 0.0079 ns |
-//| NoSimd_Ref_Safe         | 1.7632 ns | 0.0165 ns | 0.0129 ns |
-//| NoSimd_NoRef_Safe       | 1.9171 ns | 0.0112 ns | 0.0087 ns |
-//| Simd_Safe_Ref_Fixed     | 2.1410 ns | 0.0119 ns | 0.0099 ns |
-//| Simd_Safe_NoRef_NoFixed | 7.9380 ns | 0.0472 ns | 0.0442 ns |
-//| NoSimd_Ref_UnSafe       | 5.8196 ns | 0.0341 ns | 0.0319 ns |
-//| NoSimd_NoRef_UnSafe     | 6.7842 ns | 0.0301 ns | 0.0281 ns |
-//| Simd_UnSafe             | 8.6305 ns | 0.0527 ns | 0.0493 ns |
-//| Simd_NumericBased_Safe_ | 2.5487 ns | 0.0259 ns | 0.0243 ns |
-
+//| Indexer                 | 0.9256 ns | 0.0242 ns | 0.0215 ns |
+//| NoSimd_Ref_Safe         | 1.6888 ns | 0.0318 ns | 0.0298 ns |
+//| NoSimd_NoRef_Safe       | 1.8359 ns | 0.0519 ns | 0.0486 ns |
+//| Simd_Safe_Ref_Fixed     | 2.0322 ns | 0.0403 ns | 0.0337 ns |
+//| Simd_Safe_NoRef_NoFixed | 7.8103 ns | 0.1303 ns | 0.1219 ns |
+//| NoSimd_Ref_UnSafe       | 5.6034 ns | 0.0632 ns | 0.0591 ns |
+//| NoSimd_NoRef_UnSafe     | 6.4672 ns | 0.1076 ns | 0.1007 ns |
+//| Simd_UnSafe             | 8.2496 ns | 0.1442 ns | 0.1349 ns |
+//| Simd_NumericBased_Safe  | 2.6910 ns | 0.0542 ns | 0.0507 ns |
 
 namespace TestDotNet.Tests.VectorOperations;
 
@@ -89,6 +88,19 @@ public struct Vector3Safe
             void* resPtr = &result;
             System.Runtime.Intrinsics.X86.Sse.Store((float*)resPtr, resv);
             return result;
+        }
+    }
+
+    public static Vector3Safe AddSimd_Numeric_NoRef_NoFixed(Vector3Safe a, Vector3Safe b)
+    {
+        unsafe
+        {
+            void* aPtr = &a;
+            void* bPtr = &b;
+            Vector3 av = *(Vector3*)aPtr;
+            Vector3 bv = *(Vector3*)bPtr;
+            Vector3 aRes = av + bv;
+            return *(Vector3Safe*)&aRes;
         }
     }
 }
@@ -255,20 +267,10 @@ public class IntrinsicTest
     }
 
     [Benchmark]
-    public unsafe Vector3Safe Simd_NumericBased_Safe_()
+    public unsafe Vector3Safe Simd_NumericBased_Safe()
     {
         counter++;
         counter &= Mask;
-
-        fixed (void* aPtr = &aS[counter])
-        {
-            fixed (void* bPtr = &bS[counter])
-            {
-                Vector3 av = *(Vector3*)aPtr;
-                Vector3 bv = *(Vector3*)bPtr;
-                Vector3 aRes = av + bv;
-                return *(Vector3Safe*)&aRes;
-            }
-        }
+        return Vector3Safe.AddSimd_Numeric_NoRef_NoFixed(aS[counter], bS[counter]);
     }
 }
