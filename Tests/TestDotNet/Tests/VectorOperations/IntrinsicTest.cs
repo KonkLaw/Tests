@@ -1,5 +1,6 @@
 ﻿using BenchmarkDotNet.Attributes;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics;
 using TestDotNet.Utils;
@@ -13,15 +14,16 @@ using TestDotNet.Utils;
 
 //|                  Method |      Mean |     Error |    StdDev |
 //|------------------------ |----------:| ----------:| ----------:|
-//| Indexer                 | 0.9256 ns | 0.0242 ns | 0.0215 ns |
-//| NoSimd_Ref_Safe         | 1.6888 ns | 0.0318 ns | 0.0298 ns |
-//| NoSimd_NoRef_Safe       | 1.8359 ns | 0.0519 ns | 0.0486 ns |
-//| Simd_Safe_Ref_Fixed     | 2.0322 ns | 0.0403 ns | 0.0337 ns |
-//| Simd_Safe_NoRef_NoFixed | 7.8103 ns | 0.1303 ns | 0.1219 ns |
-//| NoSimd_Ref_UnSafe       | 5.6034 ns | 0.0632 ns | 0.0591 ns |
-//| NoSimd_NoRef_UnSafe     | 6.4672 ns | 0.1076 ns | 0.1007 ns |
-//| Simd_UnSafe             | 8.2496 ns | 0.1442 ns | 0.1349 ns |
-//| Simd_NumericBased_Safe  | 2.6910 ns | 0.0542 ns | 0.0507 ns |
+//| Indexer                 | 0.9562 ns | 0.0085 ns | 0.0079 ns |
+//| NoSimd_Ref_Safe         | 1.7632 ns | 0.0165 ns | 0.0129 ns |
+//| NoSimd_NoRef_Safe       | 1.9171 ns | 0.0112 ns | 0.0087 ns |
+//| Simd_Safe_Ref_Fixed     | 2.1410 ns | 0.0119 ns | 0.0099 ns |
+//| Simd_Safe_NoRef_NoFixed | 7.9380 ns | 0.0472 ns | 0.0442 ns |
+//| NoSimd_Ref_UnSafe       | 5.8196 ns | 0.0341 ns | 0.0319 ns |
+//| NoSimd_NoRef_UnSafe     | 6.7842 ns | 0.0301 ns | 0.0281 ns |
+//| Simd_UnSafe             | 8.6305 ns | 0.0527 ns | 0.0493 ns |
+//| Simd_NumericBased_Safe_ | 2.5487 ns | 0.0259 ns | 0.0243 ns |
+
 
 namespace TestDotNet.Tests.VectorOperations;
 
@@ -80,10 +82,10 @@ public struct Vector3Safe
         unsafe
         {
             void* aPtr = &a;
-            void * bPtr = &b;
-            Vector128<float> vA = System.Runtime.Intrinsics.X86.Sse.LoadVector128((float*)aPtr);
-            Vector128<float> vB = System.Runtime.Intrinsics.X86.Sse.LoadVector128((float*)bPtr);
-            Vector128<float> resv = System.Runtime.Intrinsics.X86.Sse.Add(vA, vB);
+            void * bPtr = &b;            
+            Vector128<float> resv = System.Runtime.Intrinsics.X86.Sse.Add(
+                System.Runtime.Intrinsics.X86.Sse.LoadVector128((float*)aPtr),
+                System.Runtime.Intrinsics.X86.Sse.LoadVector128((float*)bPtr));
             Vector3Safe result;
             void* resPtr = &result;
             System.Runtime.Intrinsics.X86.Sse.Store((float*)resPtr, resv);
@@ -102,6 +104,11 @@ public struct Vector3Safe
             Vector3 aRes = av + bv;
             return *(Vector3Safe*)&aRes;
         }
+    }
+
+    public static Vector3Safe AddSimd_NoRef_NoFixed_WithPass(Vector3Safe a, Vector3Safe b)
+    {
+        return AddSimd_Ref_Fixed(ref a, ref b);
     }
 }
 
@@ -138,14 +145,34 @@ public unsafe struct Vector3Unsafe
         };
     }
 
-    public static Vector3Unsafe AddSimdNoRef(Vector3Unsafe a, Vector3Unsafe b)
+    public static Vector3Unsafe AddSimd_NoRef_NoFixed(Vector3Unsafe a, Vector3Unsafe b)
     {
-        Vector128<float> vA = System.Runtime.Intrinsics.X86.Sse.LoadVector128(a.arr);
-        Vector128<float> vB = System.Runtime.Intrinsics.X86.Sse.LoadVector128(b.arr);
-        Vector128<float> resv = System.Runtime.Intrinsics.X86.Sse.Add(vA, vB);
+        Vector128<float> resv = System.Runtime.Intrinsics.X86.Sse.Add(
+            System.Runtime.Intrinsics.X86.Sse.LoadVector128(a.arr),
+            System.Runtime.Intrinsics.X86.Sse.LoadVector128(b.arr));
         Vector3Unsafe result = default;
         System.Runtime.Intrinsics.X86.Sse.Store(result.arr, resv);
         return result;
+    }
+
+    public static Vector3Unsafe AddSimd_Ref_Fixed(ref Vector3Unsafe a, ref Vector3Unsafe b)
+    {
+        unsafe
+        {
+            fixed (float* aPtr = a.arr)
+            {
+                fixed (float* bPtr = b.arr)
+                {
+                    Vector128<float> vA = System.Runtime.Intrinsics.X86.Sse.LoadVector128(aPtr);
+                    Vector128<float> vB = System.Runtime.Intrinsics.X86.Sse.LoadVector128(bPtr);
+                    Vector128<float> resv = System.Runtime.Intrinsics.X86.Sse.Add(vA, vB);
+                    Vector3Unsafe result;
+                    void* resPtr = &result;
+                    System.Runtime.Intrinsics.X86.Sse.Store((float*)resPtr, resv);
+                    return result;
+                }
+            }
+        }
     }
 }
 
@@ -211,7 +238,7 @@ public class IntrinsicTest
     }
 
     [Benchmark]
-    public Vector3Safe NoSimd_Ref_Safe()
+    public Vector3Safe Safe_NoSimd_Ref()
     {
         counter++;
         counter &= Mask;
@@ -219,7 +246,7 @@ public class IntrinsicTest
     }
 
     [Benchmark]
-    public Vector3Safe NoSimd_NoRef_Safe()
+    public Vector3Safe Safe_NoSimd_NoRef()
     {
         counter++;
         counter &= Mask;
@@ -227,7 +254,7 @@ public class IntrinsicTest
     }
 
     [Benchmark]
-    public Vector3Safe Simd_Safe_Ref_Fixed()
+    public Vector3Safe Safe_Simd_RefFixed()
     {
         counter++;
         counter &= Mask;
@@ -235,7 +262,7 @@ public class IntrinsicTest
     }
 
     [Benchmark]
-    public Vector3Safe Simd_Safe_NoRef_NoFixed()
+    public Vector3Safe Safe_Simd_NoRefNoFixed()
     {
         counter++;
         counter &= Mask;
@@ -243,7 +270,15 @@ public class IntrinsicTest
     }
 
     [Benchmark]
-    public Vector3Unsafe NoSimd_Ref_UnSafe()
+    public Vector3Safe Safe_Simd__NoRefNoFixed_WithPass()
+    {
+        counter++;
+        counter &= Mask;
+        return Vector3Safe.AddSimd_NoRef_NoFixed_WithPass(aS[counter], bS[counter]);
+    }
+
+    [Benchmark]
+    public Vector3Unsafe UnSafe_NoSimd_Ref()
     {
         counter++;
         counter &= Mask;
@@ -251,7 +286,7 @@ public class IntrinsicTest
     }
 
     [Benchmark]
-    public Vector3Unsafe NoSimd_NoRef_UnSafe()
+    public Vector3Unsafe UnSafe_NoSimd_NoRef()
     {
         counter++;
         counter &= Mask;
@@ -259,11 +294,19 @@ public class IntrinsicTest
     }
 
     [Benchmark]
-    public Vector3Unsafe Simd_UnSafe()
+    public Vector3Unsafe UnSafe_Simd_NoRefNoFixed()
     {
         counter++;
         counter &= Mask;
-        return Vector3Unsafe.AddSimdNoRef(aU[counter], bU[counter]);
+        return Vector3Unsafe.AddSimd_NoRef_NoFixed(aU[counter], bU[counter]);
+    }
+
+    [Benchmark]
+    public Vector3Unsafe UnSafe_Simd_RefFixed()
+    {
+        counter++;
+        counter &= Mask;
+        return Vector3Unsafe.AddSimd_Ref_Fixed(ref aU[counter], ref bU[counter]);
     }
 
     [Benchmark]
