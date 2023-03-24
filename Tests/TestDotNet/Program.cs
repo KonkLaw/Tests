@@ -1,6 +1,5 @@
 ﻿using BenchmarkDotNet.Running;
 using TestDotNet.Tests.GeneralCodeExecution;
-using TestDotNet.Tests.VectorOperations;
 using TestDotNet.Utils;
 
 
@@ -9,7 +8,7 @@ using TestDotNet.Utils;
 RunHelper.CheckEnviroment();
 RunHelper.CheckRunModeAndRequestEnter();
 
-BenchmarkRunner.Run<General>();
+BenchmarkRunner.Run<SetterVsRef>();
 
 Console.WriteLine("End of test.");
 Console.WriteLine("Press any key for exit.");
