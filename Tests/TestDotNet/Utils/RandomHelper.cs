@@ -4,10 +4,10 @@ class RandomHelper
 {
     private static readonly Random Random = new Random(DateTime.Now.Millisecond);
 
-    public static float GetFloat()
-    {
-        return Random.NextSingle();
-    }
+    public static float GetFloat() => Random.NextSingle();
+
+    public static float GetFloat(float max = 1.0f, float min = 0f)
+        => min + Random.NextSingle() * (max - min);
 
     public static float[] GetFloatNumbers(int numbersCount)
     {
@@ -19,16 +19,27 @@ class RandomHelper
         return result;
     }
 
-    public static Vector3F[] GetVectors(int count)
+    public static Vector3F[] GetVectors(int count, float max, float min)
     {
-        float[] values = GetFloatNumbers(count * Vector3F.ComponetsCount);
         var vectors = new Vector3F[count];
         for (int i = 0; i < count; i++)
         {
             vectors[i] = new Vector3F(
-                Vector3F.ComponetsCount * values[i],
-                Vector3F.ComponetsCount * values[i] + 1,
-                Vector3F.ComponetsCount * values[i] + 2);
+                GetFloat(max, min),
+                GetFloat(max, min),
+                GetFloat(max, min));
+        }
+        return vectors;
+    }
+
+    public static Vector2F[] GetVectors2F(int count, float max, float min)
+    {
+        var vectors = new Vector2F[count];
+        for (int i = 0; i < count; i++)
+        {
+            vectors[i] = new Vector2F(
+                GetFloat(max, min),
+                GetFloat(max, min));
         }
         return vectors;
     }

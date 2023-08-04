@@ -21,13 +21,13 @@ using TestDotNet.Utils;
 
 namespace TestDotNet.Tests.MultithreadingTest;
 
-public class ParralelExcutionTest
+public class ParallelExecutionTest
 {
     private readonly Matrix4F[] inPrams;
     private readonly Matrix4F[] outPrams;
     private const int MatricesCount = 120_000;
 
-    public ParralelExcutionTest()
+    public ParallelExecutionTest()
     {
         inPrams = GetRandomMatrices(MatricesCount);
         outPrams = new Matrix4F[MatricesCount];
@@ -126,7 +126,7 @@ public class ParralelExcutionTest
     }
 
 
-    private static Matrix4F[] GetRandomMatrices(int count)
+    public static Matrix4F[] GetRandomMatrices(int count)
     {
         var matrices = new Matrix4F[count];
         for (int i = 0; i < count; i++)

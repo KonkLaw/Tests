@@ -81,7 +81,7 @@ public class VectorOperationsSimdTest
 
     public VectorOperationsSimdTest()
     {
-        vectorsNonSimd = RandomHelper.GetVectors(VectorsCount);
+        vectorsNonSimd = RandomHelper.GetVectors(VectorsCount, 1, 0);
 
         float[] values = RandomHelper.GetFloatNumbers(VectorsCount * 3);
         vectorsSimd4 = new Vector4[VectorsCount];

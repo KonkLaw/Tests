@@ -1,3 +1,5 @@
+using System.Runtime.InteropServices;
+
 namespace TestDotNet.Utils;
 
 public class Vector4FRef
@@ -47,7 +49,7 @@ public struct Vector4FVal
 }
 
 //[StructLayout(LayoutKind.Explicit)]
-public unsafe struct Vector3F
+public struct Vector3F
 {
     public const int ComponetsCount = 3;
     //[FieldOffset(0)]
@@ -67,10 +69,44 @@ public unsafe struct Vector3F
         Z = z;
     }
 
+    public Vector3F(float value)
+    {
+        X = Y = Z = value;
+    }
+
+
     public static Vector3F operator +(Vector3F a, Vector3F b)
         => new Vector3F(
             a.X + b.X,
             a.Y + b.Y,
             a.Z + b.Z);
+}
 
+public struct Vector2F
+{
+    public float X;
+    public float Y;
+
+    public Vector2F(float value)
+    {
+        X = Y = value;
+    }
+
+    public Vector2F(float x, float y)
+    {
+        X = x;
+        Y = y;
+    }
+}
+
+public struct Bounds
+{
+    public Vector3F Min;
+    public Vector3F Max;
+
+    public Bounds(Vector3F position)
+    {
+        Min = position;
+        Max = position;
+    }
 }
