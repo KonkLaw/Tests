@@ -2,6 +2,7 @@
 using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Running;
 using Perfolizer.Horology;
+using TestDotNet.Tests.CollectionsTest;
 using TestDotNet.Tests.MultithreadingTest;
 using TestDotNet.Utils;
 
@@ -13,7 +14,7 @@ RunHelper.CheckRunModeAndRequestEnter();
 
 ManualConfig? config = null;
 
-bool fastRun = true;
+bool fastRun = false;
 if (fastRun)
     config = ManualConfig.Create(DefaultConfig.Instance)
         .AddJob(Job.Default
@@ -32,7 +33,7 @@ config = (config ?? DefaultConfig.Instance)
 // ========================================
 
 
-BenchmarkRunner.Run<BoundsSearchTest>(config);
+BenchmarkRunner.Run<WorkWitArrayTest>(config);
 
 
 
