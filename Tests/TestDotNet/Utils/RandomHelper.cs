@@ -9,12 +9,12 @@ class RandomHelper
     public static float GetFloat(float max = 1.0f, float min = 0f)
         => min + Random.NextSingle() * (max - min);
 
-    public static float[] GetFloatNumbers(int numbersCount)
+    public static float[] GetFloatNumbers(int numbersCount, float max = 1f, float min = 0)
     {
         var result = new float[numbersCount];
         for (int i = 0; i < result.Length; i++)
         {
-            result[i] = Random.Next() / (1.0f / int.MaxValue);
+	        result[i] = GetFloat(max, min);
         }
         return result;
     }
