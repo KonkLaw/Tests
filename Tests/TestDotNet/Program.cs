@@ -2,6 +2,7 @@
 using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Running;
 using Perfolizer.Horology;
+using TestDotNet.Tests;
 using TestDotNet.Tests.MultithreadingTest;
 using TestDotNet.Utils;
 
@@ -32,7 +33,7 @@ config = (config ?? DefaultConfig.Instance)
 // ========================================
 
 
-BenchmarkRunner.Run<MinMaxComputationTest>(config);
+BenchmarkRunner.Run<TestOfTest>(config);
 
 
 
