@@ -55,7 +55,7 @@ class TaskBasedCompute<TElem> : RunnerTasksBase<TElem, object?>
 
 static class Algorithms
 {
-    public static void Find3F_2(Vector3F[] data, int start, int stop)
+    public static void Find3FBounds(Vector3F[] data, int start, int stop)
     {
         FastBounds3 fastBounds3 = new FastBounds3(data[start]);
         for (int i = start + 1; i < stop; i++)
@@ -63,31 +63,31 @@ static class Algorithms
         Bounds bounds = fastBounds3.GetBounds();
     }
 
-    public static void Find3F_1(Vector3F[] data, int start, int stop)
+    public static void Find3FPosMin(Vector3F[] data, int start, int stop)
     {
-        FastBounds3_2 fastBounds = new FastBounds3_2();
+        FastBounds3PosMin fastBounds = new FastBounds3PosMin();
         for (int i = start; i < stop; i++)
             fastBounds.Merge(ref data[i]);
         var bounds = fastBounds.GetPositiveMin();
     }
 
-    public static void Find2F_2(Vector2F[] data, int start, int stop)
+    public static void Find2FBounds(Vector2F[] data, int start, int stop)
     {
-        FastBounds2 fastBounds3 = new FastBounds2(data[start]);
+        FastBounds fastBounds3 = new FastBounds(data[start]);
         for (int i = start + 1; i < stop; i++)
             fastBounds3.Merge(ref data[i]);
         fastBounds3.GetBounds(out _, out _);
     }
 
-    public static void Find2F_1(Vector2F[] data, int start, int stop)
+    public static void Find2FPosMin(Vector2F[] data, int start, int stop)
     {
-        FastBounds2_2 fastBounds = new FastBounds2_2();
+        FastBounds2PosMin fastBounds = new FastBounds2PosMin();
         for (int i = start; i < stop; i++)
             fastBounds.Merge(data[i]);
         var bounds = fastBounds.GetPositiveMin();
     }
 
-    public static void Find1F_2(float[] data, int start, int stop)
+    public static void Find1FBounds(float[] data, int start, int stop)
     {
         FastBounds1 fastBounds3 = new FastBounds1(data[start]);
         for (int i = start + 1; i < stop; i++)
@@ -95,9 +95,9 @@ static class Algorithms
         fastBounds3.GetBounds(out _, out _);
     }
 
-    public static void Find1F_1(float[] data, int start, int stop)
+    public static void Find1FPosMin(float[] data, int start, int stop)
     {
-        FastBounds1_2 fastBounds = new FastBounds1_2();
+        FastBounds1PosMin fastBounds = new FastBounds1PosMin();
         for (int i = start; i < stop; i++)
             fastBounds.Merge(data[i]);
         var bounds = fastBounds.GetPositiveMin();
@@ -134,36 +134,36 @@ static class Algorithms
         public Bounds GetBounds() => new Bounds { Max = max, Min = min };
     }
 
-    struct FastBounds3_2
+    struct FastBounds3PosMin
     {
         private Vector3F positiveMin;
 
-        public FastBounds3_2()
+        public FastBounds3PosMin()
         {
             positiveMin = new Vector3F(float.MaxValue);
         }
 
         public void Merge(ref Vector3F point)
         {
-            if (point.X > 0 && point.X < positiveMin.X)
+            if (point.X > 0 & point.X < positiveMin.X)
                 positiveMin.X = point.X;
 
-            if (point.Y > 0 && point.Y < positiveMin.Y)
+            if (point.Y > 0 & point.Y < positiveMin.Y)
                 positiveMin.Y = point.Y;
 
-            if (point.Z > 0 && point.Z < positiveMin.Z)
+            if (point.Z > 0 & point.Z < positiveMin.Z)
                 positiveMin.Z = point.Z;
         }
 
         public Vector3F GetPositiveMin() => positiveMin;
     }
 
-    struct FastBounds2
+    struct FastBounds
     {
         private Vector2F min;
         private Vector2F max;
 
-        public FastBounds2(Vector2F firstPoint)
+        public FastBounds(Vector2F firstPoint)
         {
             min = max = firstPoint;
         }
@@ -188,21 +188,21 @@ static class Algorithms
         }
     }
 
-    struct FastBounds2_2
+    struct FastBounds2PosMin
     {
         private Vector2F positiveMin;
 
-        public FastBounds2_2()
+        public FastBounds2PosMin()
         {
             positiveMin = new Vector2F(float.MaxValue);
         }
 
         public void Merge(Vector2F point)
         {
-            if (point.X > 0 && point.X < positiveMin.X)
+            if (point.X > 0 & point.X < positiveMin.X)
                 positiveMin.X = point.X;
 
-            if (point.Y > 0 && point.Y < positiveMin.Y)
+            if (point.Y > 0 & point.Y < positiveMin.Y)
                 positiveMin.Y = point.Y;
         }
 
@@ -234,18 +234,18 @@ static class Algorithms
         }
     }
 
-    struct FastBounds1_2
+    struct FastBounds1PosMin
     {
         private float positiveMin;
 
-        public FastBounds1_2()
+        public FastBounds1PosMin()
         {
             positiveMin = float.MaxValue;
         }
 
         public void Merge(float point)
         {
-            if (point > 0 && point < positiveMin)
+            if (point > 0 & point < positiveMin)
                 positiveMin = point;
         }
 
@@ -253,18 +253,27 @@ static class Algorithms
     }
 }
 
-public record ComputeInfo(int? ThreadsCount, bool UseTasks, string Id)
+public record ComputeInfo(int? ThreadsCount, bool UseTasks)
 {
-    public override string ToString() =>
-        Id + (ThreadsCount.HasValue
-            ? $" {(UseTasks ? "TaskBased" : "ParallelBased")} ({ThreadsCount.Value})"
-            : " One thread");
+	public override string ToString()
+	{
+		if (ThreadsCount.HasValue)
+		{
+			if (UseTasks)
+				return $"{ThreadsCount.Value:D3} Tasks ";
+			string xInfo = ThreadsCount.Value % Environment.ProcessorCount == 0
+				? string.Concat(ThreadsCount.Value / Environment.ProcessorCount, "x")
+				: string.Empty;
+			return $"{ThreadsCount.Value:D3} PaFor " + xInfo;
+		}
+		return "(--) SingleThread";
+	}
 
-    public Action GetAction(int pointCount, int dimensionsCount, bool findFullBounds)
+	public Action GetAction(int pointCount, int dimensionsCount, bool findFullBounds)
     {
-        Action<float[], int, int> GetAction1() => findFullBounds ? Algorithms.Find1F_1 : Algorithms.Find1F_2;
-        Action<Vector2F[], int, int> GetAction2() => findFullBounds ? Algorithms.Find2F_1 : Algorithms.Find2F_2;
-        Action<Vector3F[], int, int> GetAction3() => findFullBounds ? Algorithms.Find3F_1 : Algorithms.Find3F_2;
+        Action<float[], int, int> GetAction1() => findFullBounds ? Algorithms.Find1FPosMin : Algorithms.Find1FBounds;
+        Action<Vector2F[], int, int> GetAction2() => findFullBounds ? Algorithms.Find2FPosMin : Algorithms.Find2FBounds;
+        Action<Vector3F[], int, int> GetAction3() => findFullBounds ? Algorithms.Find3FPosMin : Algorithms.Find3FBounds;
 
         switch (dimensionsCount)
         {
@@ -302,39 +311,42 @@ public record ComputeInfo(int? ThreadsCount, bool UseTasks, string Id)
 
 public class BoundsSearchTest
 {
-    [Params(true, false)]
-    public bool FindFullBounds { get; set; }
+	[Params(true/*, false*/)]
+	public bool FindFullBounds { get; set; }
 
-    [Params(1, 2, 3)]
-    public int DimensionsCount { get; set; }
+	[Params(/*1, 2,*/ 3)]
+	public int DimensionsCount { get; set; }
 
-    [Params(100, 500, 1_000, 5_000, 7_000, 8_500, 10_000, 50_000, 100_000, 500_000, 5_000_000)]
-    public int Count { get; set; }
+	[Params(/*100, 500,  1_000, 5_000, 7500, 10_000, 15_000,*/ 100_000, 5_000_000)]
+	public int Count { get; set; }
 
-    private readonly Collection<ComputeInfo> collection;
+	private readonly Collection<ComputeInfo> collection;
 
-    public BoundsSearchTest()
-    {
-        List<int> threadsCounts = new List<int> { 1, 2, 4, 6, 8 };
-        if (threadsCounts.Last() < Environment.ProcessorCount)
-        {
-            threadsCounts.Add(Environment.ProcessorCount);
-        }
+	public BoundsSearchTest()
+	{
+		List<int> threadsCounts = new List<int> { 2, 4 };
+		if (threadsCounts.Last() < Environment.ProcessorCount)
+		{
+			threadsCounts.Add(Environment.ProcessorCount);
+		}
 
-        int counter = 100;
-        List<ComputeInfo> list = new List<ComputeInfo>
-        {
-            new ComputeInfo(null, true, "---")
-        };
-        foreach (int count in threadsCounts)
-        {
-            list.Add(new ComputeInfo(count, UseTasks: true, counter++.ToString()));
-            list.Add(new ComputeInfo(count, UseTasks: false, counter++.ToString()));
-        }
-        collection = new Collection<ComputeInfo>(list);
-    }
+		foreach (int multiplier in new[] { 2, 3, 5, 20 })
+		{
+			threadsCounts.Add(multiplier * Environment.ProcessorCount);
+		}
+		List<ComputeInfo> list = new List<ComputeInfo>
+		{
+			new ComputeInfo(null, true)
+		};
+		foreach (int count in threadsCounts)
+		{
+			list.Add(new ComputeInfo(count, UseTasks: false));
+			//list.Add(new ComputeInfo(count, UseTasks: true));
+		}
+		collection = new Collection<ComputeInfo>(list);
+	}
 
-    public IEnumerable<ComputeInfo> ComputeInfos => collection;
+	public IEnumerable<ComputeInfo> ComputeInfos => collection;
 
     private Action action = null!;
 
