@@ -34,8 +34,7 @@ RunLoad();
 RunHelper.CheckEnviroment();
 RunHelper.CheckRunModeAndRequestEnter();
 
-
-BenchmarkRunner.Run<BoundsSearchTest>(config);
+BenchmarkRunner.Run<MatrixCalcTest>(config);
 
 
 // ========================================
@@ -50,23 +49,18 @@ void RunLoad()
 {
 	Action action = () =>
 	{
-		// See https://aka.ms/new-console-template for more information
-
 		ConsoleColor oldColor = Console.BackgroundColor;
 		Console.BackgroundColor = ConsoleColor.Red;
 		Console.WriteLine("Run additional load");
 		Console.BackgroundColor = oldColor;
 
-		double res = 0;
+		Matrix4F[] matrices = MatrixAlgorithms.GetRandomMatrices(100);
+
 		while (true)
 		{
-			double sin = Math.Sin(45);
-			if (sin > 5)
-				break;
-			res += sin;
+			MatrixAlgorithms.ProcessRange(matrices, 0, matrices.Length);
 		}
-
 		throw new InvalidOperationException();
 	};
-	//Task.Run(action);
+	Task.Run(action);
 }

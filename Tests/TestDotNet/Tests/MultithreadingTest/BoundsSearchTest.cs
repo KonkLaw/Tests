@@ -3,56 +3,6 @@ using TestDotNet.Utils;
 
 namespace TestDotNet.Tests.MultithreadingTest;
 
-class ForBasedCompute<TElem> : RunnerParallelFor<TElem, object?>
-{
-    private readonly Action<TElem[], int, int> action;
-    private readonly int threadsCount;
-    private int countInBatch;
-
-    public ForBasedCompute(int threadsCount, Action<TElem[], int, int> action)
-    {
-        this.action = action;
-        this.threadsCount = threadsCount;
-    }
-
-    protected override int GetThreadsCount() => threadsCount;
-
-    protected override void PrepareState(int batchSize) => countInBatch = batchSize;
-
-    protected override void Handle(int batchId)
-    {
-        int start = batchId * countInBatch;
-        int stop = (batchId + 1) * countInBatch;
-        action(Data!, start, stop);
-    }
-}
-
-class TaskBasedCompute<TElem> : RunnerTasksBase<TElem, object?>
-    where TElem : unmanaged
-{
-    private readonly Action<TElem[], int, int> action;
-    private readonly int threadsCount;
-    private int countInBatch;
-
-    public TaskBasedCompute(int threadsCount, Action<TElem[], int, int> action)
-    {
-        this.action = action;
-        this.threadsCount = threadsCount;
-    }
-
-    protected override int GetThreadsCount() => threadsCount;
-
-    protected override void PrepareState(int batchSize) => countInBatch = batchSize;
-
-    protected override void Handle(object? info)
-    {
-        int batchIdd = (int)info!;
-        int start = batchIdd * countInBatch;
-        int stop = (batchIdd + 1) * countInBatch;
-        action(Data!, start, stop);
-    }
-}
-
 static class Algorithms
 {
     public static void Find3FBounds(Vector3F[] data, int start, int stop)
@@ -287,7 +237,7 @@ public record ComputeInfo(int? ThreadsCount, bool UseTasks)
                 Vector3F[] vectors3F = RandomHelper.GetVectors(pointCount, -5, 5);
                 return GetAction(vectors3F, ThreadsCount, GetAction3());
             default:
-                throw new NotImplementedException();
+                throw new InvalidOperationException();
         }
     }
 
