@@ -48,7 +48,7 @@ Console.ReadLine();
 
 void RunLoad()
 {
-	Task.Run(() =>
+	Action action = () =>
 	{
 		// See https://aka.ms/new-console-template for more information
 
@@ -67,5 +67,6 @@ void RunLoad()
 		}
 
 		throw new InvalidOperationException();
-	});
+	};
+	//Task.Run(action);
 }
