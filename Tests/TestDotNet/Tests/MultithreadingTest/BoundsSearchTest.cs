@@ -3,6 +3,145 @@ using TestDotNet.Utils;
 
 namespace TestDotNet.Tests.MultithreadingTest;
 
+public class BoundsSearchTest
+{
+    //[Params(false)]
+    //public bool FindFullBounds { get; set; }
+
+    //[Params(3)]
+    //public int DimensionsCount { get; set; }
+    //[Params(1_000, 3_000, 4_000, 5_000, 6_000, 7000, 7500, 10_000)]
+    //public int Count { get; set; }
+
+    //[Params(2)]
+    //public int DimensionsCount { get; set; }
+    //[Params(1_500, 6_000, 7_500, 9_000, 10_500, 11_250, 15_000)]
+    //public int Count { get; set; }
+
+    //[Params(1)]
+    //public int DimensionsCount { get; set; }
+    //[Params(3000, 9_000, 12_000, 15_000, 18_000, 21_000, 22500, 30_000)]
+    //public int Count { get; set; }
+
+
+
+    [Params(true)]
+    public bool FindFullBounds { get; set; }
+
+    [Params(3)]
+    public int DimensionsCount { get; set; }
+    [Params(1_000, 4_000, 5_000, 6_000, 7000, 7500, 10_000)]
+    public int Count { get; set; }
+
+    //[Params(2)]
+    //public int DimensionsCount { get; set; }
+    //[Params(1_500, 6_000, 7_500, 9_000, 10_500, 11_250, 15_000)]
+    //public int Count { get; set; }
+
+    //[Params(1)]
+    //public int DimensionsCount { get; set; }
+    //[Params(3_000, 12_000, 15_000, 18_000, 21_000, 22_500, 30_000)]
+    //public int Count { get; set; }
+
+
+    private readonly Collection<ComputeInfo> collection;
+
+    public BoundsSearchTest()
+    {
+        List<int> threadsCounts = new List<int> { 2 };
+        if (threadsCounts.Last() < Environment.ProcessorCount)
+        {
+            threadsCounts.Add(Environment.ProcessorCount);
+        }
+        //foreach (int multiplier in new[] { 2, 3, 5, 20 })
+        //{
+        //    threadsCounts.Add(multiplier * Environment.ProcessorCount);
+        //}
+        List<ComputeInfo> list = new List<ComputeInfo>
+        {
+            new ComputeInfo(null, true)
+        };
+        foreach (int count in threadsCounts)
+        {
+            if (count > Environment.ProcessorCount)
+                break;
+            list.Add(new ComputeInfo(count, UseTasks: false));
+            //list.Add(new ComputeInfo(count, UseTasks: true));
+        }
+        collection = new Collection<ComputeInfo>(list);
+    }
+
+    public IEnumerable<ComputeInfo> ComputeInfos => collection;
+
+    private Action action = null!;
+
+    [GlobalSetup]
+    public void Setup()
+    {
+        action = collection.GetLastEnumerated()!.GetAction(Count, DimensionsCount, FindFullBounds);
+    }
+
+    [Benchmark]
+    [ArgumentsSource(nameof(ComputeInfos))]
+    public void Run(ComputeInfo computeInfo) => action();
+}
+
+public record ComputeInfo(int? ThreadsCount, bool UseTasks)
+{
+    public override string ToString()
+    {
+        if (ThreadsCount.HasValue)
+        {
+            if (UseTasks)
+                return $"{ThreadsCount.Value:D3} Tasks ";
+            string xInfo = ThreadsCount.Value % Environment.ProcessorCount == 0
+                ? string.Concat(ThreadsCount.Value / Environment.ProcessorCount, "x")
+                : string.Empty;
+            return $"{ThreadsCount.Value:D3} PaFor " + xInfo;
+        }
+        return "(--) SingleThread";
+    }
+
+    public Action GetAction(int pointCount, int dimensionsCount, bool findFullBounds)
+    {
+        Action<float[], int, int> GetAction1() => findFullBounds ? Algorithms.Find1FPosMin : Algorithms.Find1FBounds;
+        Action<Vector2F[], int, int> GetAction2() => findFullBounds ? Algorithms.Find2FPosMin : Algorithms.Find2FBounds;
+        Action<Vector3F[], int, int> GetAction3() => findFullBounds ? Algorithms.Find3FPosMin : Algorithms.Find3FBounds;
+
+        switch (dimensionsCount)
+        {
+            case 1:
+                float[] vectors1F = RandomHelper.GetFloatNumbers(pointCount);
+                return GetAction(vectors1F, ThreadsCount, GetAction1());
+            case 2:
+                Vector2F[] vectors2F = RandomHelper.GetVectors2F(pointCount, -5, 5);
+                return GetAction(vectors2F, ThreadsCount, GetAction2());
+            case 3:
+                Vector3F[] vectors3F = RandomHelper.GetVectors(pointCount, -5, 5);
+                return GetAction(vectors3F, ThreadsCount, GetAction3());
+            default:
+                throw new InvalidOperationException();
+        }
+    }
+
+    private Action GetAction<TElement>(TElement[] array, int? threadsCount, Action<TElement[], int, int> action)
+        where TElement : unmanaged
+    {
+        if (threadsCount.HasValue)
+        {
+            Action<TElement[], object?> computer = UseTasks
+                ? new TaskBasedCompute<TElement>(threadsCount.Value, action).Run
+                : new ForBasedCompute<TElement>(threadsCount.Value, action).Run;
+
+            return () => computer(array, null);
+        }
+        else
+        {
+            return () => action(array, 0, array.Length);
+        }
+    }
+}
+
 static class Algorithms
 {
     public static void Find3FBounds(Vector3F[] data, int start, int stop)
@@ -201,112 +340,4 @@ static class Algorithms
 
         public float GetPositiveMin() => positiveMin;
     }
-}
-
-public record ComputeInfo(int? ThreadsCount, bool UseTasks)
-{
-	public override string ToString()
-	{
-		if (ThreadsCount.HasValue)
-		{
-			if (UseTasks)
-				return $"{ThreadsCount.Value:D3} Tasks ";
-			string xInfo = ThreadsCount.Value % Environment.ProcessorCount == 0
-				? string.Concat(ThreadsCount.Value / Environment.ProcessorCount, "x")
-				: string.Empty;
-			return $"{ThreadsCount.Value:D3} PaFor " + xInfo;
-		}
-		return "(--) SingleThread";
-	}
-
-	public Action GetAction(int pointCount, int dimensionsCount, bool findFullBounds)
-    {
-        Action<float[], int, int> GetAction1() => findFullBounds ? Algorithms.Find1FPosMin : Algorithms.Find1FBounds;
-        Action<Vector2F[], int, int> GetAction2() => findFullBounds ? Algorithms.Find2FPosMin : Algorithms.Find2FBounds;
-        Action<Vector3F[], int, int> GetAction3() => findFullBounds ? Algorithms.Find3FPosMin : Algorithms.Find3FBounds;
-
-        switch (dimensionsCount)
-        {
-            case 1:
-                float[] vectors1F = RandomHelper.GetFloatNumbers(pointCount);
-                return GetAction(vectors1F, ThreadsCount, GetAction1());
-            case 2:
-                Vector2F[] vectors2F = RandomHelper.GetVectors2F(pointCount, -5, 5);
-                return GetAction(vectors2F, ThreadsCount, GetAction2());
-            case 3:
-                Vector3F[] vectors3F = RandomHelper.GetVectors(pointCount, -5, 5);
-                return GetAction(vectors3F, ThreadsCount, GetAction3());
-            default:
-                throw new InvalidOperationException();
-        }
-    }
-
-    private Action GetAction<TElement>(TElement[] array, int? threadsCount, Action<TElement[], int, int> action)
-        where TElement : unmanaged
-    {
-        if (threadsCount.HasValue)
-        {
-            Action<TElement[], object?> computer = UseTasks
-                ? new TaskBasedCompute<TElement>(threadsCount.Value, action).Run
-                : new ForBasedCompute<TElement>(threadsCount.Value, action).Run;
-
-            return () => computer(array, null);
-        }
-        else
-        {
-            return () => action(array, 0, array.Length);
-        }
-    }
-}
-
-public class BoundsSearchTest
-{
-	[Params(true/*, false*/)]
-	public bool FindFullBounds { get; set; }
-
-	[Params(/*1, 2,*/ 3)]
-	public int DimensionsCount { get; set; }
-
-	[Params(/*100, 500,  1_000, 5_000, 7500, 10_000, 15_000,*/ 100_000, 5_000_000)]
-	public int Count { get; set; }
-
-	private readonly Collection<ComputeInfo> collection;
-
-	public BoundsSearchTest()
-	{
-		List<int> threadsCounts = new List<int> { 2, 4 };
-		if (threadsCounts.Last() < Environment.ProcessorCount)
-		{
-			threadsCounts.Add(Environment.ProcessorCount);
-		}
-
-		foreach (int multiplier in new[] { 2, 3, 5, 20 })
-		{
-			threadsCounts.Add(multiplier * Environment.ProcessorCount);
-		}
-		List<ComputeInfo> list = new List<ComputeInfo>
-		{
-			new ComputeInfo(null, true)
-		};
-		foreach (int count in threadsCounts)
-		{
-			list.Add(new ComputeInfo(count, UseTasks: false));
-			//list.Add(new ComputeInfo(count, UseTasks: true));
-		}
-		collection = new Collection<ComputeInfo>(list);
-	}
-
-	public IEnumerable<ComputeInfo> ComputeInfos => collection;
-
-    private Action action = null!;
-
-    [GlobalSetup]
-    public void Setup()
-    {
-        action = collection.GetLastEnumerated()!.GetAction(Count, DimensionsCount, FindFullBounds);
-    }
-
-    [Benchmark]
-    [ArgumentsSource(nameof(ComputeInfos))]
-    public void Run(ComputeInfo computeInfo) => action();
 }

@@ -34,7 +34,7 @@ RunLoad();
 RunHelper.CheckEnviroment();
 RunHelper.CheckRunModeAndRequestEnter();
 
-BenchmarkRunner.Run<MatrixCalcTest>(config);
+BenchmarkRunner.Run<MatrixInvCalcTest>(config);
 
 
 // ========================================
@@ -54,13 +54,14 @@ void RunLoad()
 		Console.WriteLine("Run additional load");
 		Console.BackgroundColor = oldColor;
 
-		Matrix4F[] matrices = MatrixAlgorithms.GetRandomMatrices(100);
+
+		Matrix4F matrix = MatrixAlgorithms.GetRandomMatrix();
 
 		while (true)
 		{
-			MatrixAlgorithms.ProcessRange(matrices, 0, matrices.Length);
+			MatrixComputationTest.Process(matrix, 1000);
 		}
 		throw new InvalidOperationException();
 	};
-	Task.Run(action);
+	//Task.Run(action);
 }

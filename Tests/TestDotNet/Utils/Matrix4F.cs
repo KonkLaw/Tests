@@ -19,6 +19,14 @@ public struct Matrix4F
     public float M43;
     public float M44;
 
+    public Matrix4F(float all)
+    {
+	    M11 = M12 = M13 = M14 = all;
+		M21 = M22 = M23 = M24 = all;
+		M31 = M32 = M33 = M34 = all;
+		M41 = M42 = M43 = M44 = all;
+	}
+
     public Vector3F MultiplyNoDivision(in Vector3F v)
     {
         return new Vector3F
@@ -72,9 +80,8 @@ public struct Matrix4F
     }
 
     public static Matrix4F operator +(Matrix4F left, Matrix4F right)
-    {
-	    return new Matrix4F
-	    {
+	    => new Matrix4F
+		{
 		    M11 = left.M11 + right.M11,
 		    M12 = left.M12 + right.M12,
 		    M13 = left.M13 + right.M13,
@@ -94,8 +101,31 @@ public struct Matrix4F
 		    M42 = left.M42 + right.M42,
 		    M43 = left.M43 + right.M43,
 		    M44 = left.M44 + right.M44
+		};
+
+    public static Matrix4F operator -(Matrix4F left, Matrix4F right)
+	    => new Matrix4F
+	    {
+		    M11 = left.M11 - right.M11,
+		    M12 = left.M12 - right.M12,
+		    M13 = left.M13 - right.M13,
+		    M14 = left.M14 - right.M14,
+
+		    M21 = left.M21 - right.M21,
+		    M22 = left.M22 - right.M22,
+		    M23 = left.M23 - right.M23,
+		    M24 = left.M24 - right.M24,
+
+		    M31 = left.M31 - right.M31,
+		    M32 = left.M32 - right.M32,
+		    M33 = left.M33 - right.M33,
+		    M34 = left.M34 - right.M34,
+
+		    M41 = left.M41 - right.M41,
+		    M42 = left.M42 - right.M42,
+		    M43 = left.M43 - right.M43,
+		    M44 = left.M44 - right.M44
 	    };
-    }
 
     public static void Invert(Matrix4F value, out Matrix4F res)
     {
