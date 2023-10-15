@@ -19,16 +19,14 @@ class RandomHelper
         return result;
     }
 
+    public static Vector3F GetVector(float max, float min)
+        => new Vector3F(GetFloat(max, min), GetFloat(max, min), GetFloat(max, min));
+
     public static Vector3F[] GetVectors(int count, float max, float min)
     {
         var vectors = new Vector3F[count];
         for (int i = 0; i < count; i++)
-        {
-            vectors[i] = new Vector3F(
-                GetFloat(max, min),
-                GetFloat(max, min),
-                GetFloat(max, min));
-        }
+            vectors[i] = GetVector(max, min);
         return vectors;
     }
 

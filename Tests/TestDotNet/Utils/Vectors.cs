@@ -1,4 +1,7 @@
+using BenchmarkDotNet.Attributes;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 
 namespace TestDotNet.Utils;
 
@@ -80,6 +83,20 @@ public struct Vector3F
             a.X + b.X,
             a.Y + b.Y,
             a.Z + b.Z);
+
+    public static Vector3F operator -(Vector3F a, Vector3F b)
+    => new Vector3F(
+        a.X - b.X,
+        a.Y - b.Y,
+        a.Z - b.Z);
+
+    public static Vector3F operator /(Vector3F a, float scalar)
+        => new Vector3F(
+            a.X / scalar,
+            a.Y / scalar,
+            a.Z / scalar);
+
+    public Vector3F GetAbs() => new Vector3F(Math.Abs(X), Math.Abs(Y), Math.Abs(Z));
 }
 
 public struct Vector2F
@@ -108,5 +125,64 @@ public struct Bounds
     {
         Min = position;
         Max = position;
+    }
+
+    public static Bounds GetInvalid()
+    {
+        return new Bounds
+        {
+            Max = new Vector3F(float.MinValue),
+            Min = new Vector3F(float.MaxValue),
+        };
+    }
+
+    private void Merge(ref Bounds bounds)
+    {
+        if (bounds.Min.X < Min.X)
+            Min.X = bounds.Min.X;
+        if (bounds.Min.Y < Min.Y)
+            Min.Y = bounds.Min.Y;
+        if (bounds.Min.Z < Min.Z)
+            Min.Z = bounds.Min.Z;
+        if (bounds.Max.X > Max.X)
+            Max.X = bounds.Max.X;
+        if (bounds.Max.Y > Max.Y)
+            Max.Y = bounds.Max.Y;
+        if (bounds.Max.Z > Max.Z)
+            Max.Z = bounds.Max.Z;
+    }
+
+    public void MergeTransformed(ref Bounds bounds, ref Matrix4F transform)
+    {
+        Vector3F center = (bounds.Max + bounds.Min) / 2;
+        Vector3F halfSize = bounds.Max - center;
+        center = transform.MultiplyWithDivision(ref center);
+
+        Vector3F vX = new Vector3F(halfSize.X, 0, 0);
+        Vector3F vY = new Vector3F(0, halfSize.Y, 0);
+        Vector3F vZ = new Vector3F(0, 0, halfSize.Z);
+
+        vX = Matrix4F.TransformVector(ref vX, ref transform).GetAbs();
+        vY = Matrix4F.TransformVector(ref vY, ref transform).GetAbs();
+        vZ = Matrix4F.TransformVector(ref vZ, ref transform).GetAbs();
+
+        Vector3F abs = vX + vY + vZ;
+
+        Vector3F newMin = center - abs;
+        Vector3F newMax = center + abs;
+
+
+        if (newMin.X < Min.X)
+            Min.X = newMin.X;
+        if (newMin.Y < Min.Y)
+            Min.Y = newMin.Y;
+        if (newMin.Z < Min.Z)
+            Min.Z = newMin.Z;
+        if (newMax.X > Max.X)
+            Max.X = newMax.X;
+        if (newMax.Y > Max.Y)
+            Max.Y = newMax.Y;
+        if (newMax.Z > Max.Z)
+            Max.Z = newMax.Z;
     }
 }

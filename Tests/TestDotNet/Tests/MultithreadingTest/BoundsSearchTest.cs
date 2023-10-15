@@ -78,7 +78,7 @@ public class BoundsSearchTest
     [GlobalSetup]
     public void Setup()
     {
-        action = collection.GetLastEnumerated()!.GetAction(Count, DimensionsCount, FindFullBounds);
+        action = collection.GetCurrentEnumerated()!.GetAction(Count, DimensionsCount, FindFullBounds);
     }
 
     [Benchmark]

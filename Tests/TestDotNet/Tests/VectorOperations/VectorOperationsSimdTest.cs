@@ -123,7 +123,7 @@ public class VectorOperationsSimdTest
         Vector3F[] vectors_ = vectorsNonSimd;
         for (int i = 0; i < vectors_.Length; i++)
         {
-            vectors_[i] = m.MultiplyWithDivision(in vectors_[i]);
+            vectors_[i] = m.MultiplyWithDivision(ref vectors_[i]);
         }
         return vectors_;
     }

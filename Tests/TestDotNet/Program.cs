@@ -5,6 +5,14 @@ using Perfolizer.Horology;
 using TestDotNet.Tests.MultithreadingTest;
 using TestDotNet.Utils;
 
+//var test = new PureCpuComputationTest();
+//test.MatrixCount = 50_000_000;
+//IEnumerator<MatrixLongComputeInfo> e = test.Collection.GetEnumerator();
+//e.MoveNext();
+//e.MoveNext();
+//test.Setup();
+//test.Run(test.Collection.GetCurrentEnumerated());
+
 
 // ========================================
 
@@ -34,7 +42,7 @@ RunLoad();
 RunHelper.CheckEnviroment();
 RunHelper.CheckRunModeAndRequestEnter();
 
-BenchmarkRunner.Run<MatrixInvCalcTest>(config);
+BenchmarkRunner.Run<PureCpuComputationTest>(config);
 
 
 // ========================================

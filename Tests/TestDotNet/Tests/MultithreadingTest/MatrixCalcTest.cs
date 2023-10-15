@@ -29,7 +29,7 @@ public class MatrixInvCalcTest
 
     [GlobalSetup]
     public void Setup()
-	    => action = collection.GetLastEnumerated()!.GetAction(MatrixCount);
+	    => action = collection.GetCurrentEnumerated()!.GetAction(MatrixCount);
 
     [Benchmark]
     [ArgumentsSource(nameof(Collection))]

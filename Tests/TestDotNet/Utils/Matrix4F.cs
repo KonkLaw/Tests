@@ -37,7 +37,14 @@ public struct Matrix4F
         );
     }
 
-    public Vector3F MultiplyWithDivision(in Vector3F v)
+    public static Vector3F TransformVector(ref Vector3F vector, ref Matrix4F matrix) => new Vector3F
+    (
+        matrix.M11 * vector.X + matrix.M21 * vector.Y + matrix.M31 * vector.Z,
+        matrix.M12 * vector.X + matrix.M22 * vector.Y + matrix.M32 * vector.Z,
+        matrix.M13 * vector.X + matrix.M23 * vector.Y + matrix.M33 * vector.Z
+    );
+
+    public Vector3F MultiplyWithDivision(ref Vector3F v)
     {
         float w = 1f / (v.X * M14 + v.Y * M24 + v.Z * M34 + M44);
         return new Vector3F

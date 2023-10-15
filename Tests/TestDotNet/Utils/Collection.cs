@@ -11,7 +11,7 @@ public class Collection<T> : IEnumerable<T>
         enumerator = new Enumerator(enumerable.GetEnumerator());
     }
 
-    public T? GetLastEnumerated() => enumerator!.LastUsed;
+    public T GetCurrentEnumerated() => enumerator!.Current;
 
     public IEnumerator<T> GetEnumerator() => enumerator;
 
@@ -22,22 +22,13 @@ public class Collection<T> : IEnumerable<T>
     {
         private readonly IEnumerator<T> enumerator;
 
-        public T? LastUsed { get; private set; }
-
         public Enumerator(IEnumerator<T> enumerator) => this.enumerator = enumerator;
 
         public bool MoveNext() => enumerator.MoveNext();
 
         public void Reset() => enumerator.Reset();
 
-        public T Current
-        {
-            get
-            {
-                LastUsed = enumerator.Current;
-                return enumerator.Current;
-            }
-        }
+        public T Current => enumerator.Current;
 
         object? IEnumerator.Current => Current;
 
