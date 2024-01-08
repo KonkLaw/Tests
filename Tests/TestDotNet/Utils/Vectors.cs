@@ -97,6 +97,25 @@ public struct Vector3F
             a.Z / scalar);
 
     public Vector3F GetAbs() => new Vector3F(Math.Abs(X), Math.Abs(Y), Math.Abs(Z));
+
+    public static Vector3F Cross(Vector3F v1, Vector3F v2)
+        => new Vector3F(v1.Y * v2.Z - v1.Z * v2.Y, -(v1.X * v2.Z - v1.Z * v2.X), v1.X * v2.Y - v1.Y * v2.X);
+
+    /// <summary>
+    /// Gets result of the vector normalization.
+    /// </summary>
+    /// <returns>Normalized vector.</returns>
+    public readonly Vector3F GetNormalized()
+    {
+        float inverseLength = GetInverseLength();
+        return new Vector3F(X * inverseLength, Y * inverseLength, Z * inverseLength);
+    }
+
+    /// <summary>
+    /// Calculates inverse vector length.
+    /// </summary>
+    /// <returns>Inverse vector length.</returns>
+    public readonly float GetInverseLength() => (float)(1f / Math.Sqrt(X * X + Y * Y + Z * Z));
 }
 
 public struct Vector2F

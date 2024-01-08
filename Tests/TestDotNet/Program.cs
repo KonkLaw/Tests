@@ -36,7 +36,7 @@ config = (config ?? DefaultConfig.Instance)
 RunHelper.CheckEnviroment();
 RunHelper.CheckRunModeAndRequestEnter();
 
-BenchmarkRunner.Run<TestIndexCompute>(config);
+BenchmarkRunner.Run<NormalComputeTest>(config);
 
 
 // ========================================
