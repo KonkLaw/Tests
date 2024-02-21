@@ -11,7 +11,7 @@ public class Collection<T> : IEnumerable<T>
         enumerator = new Enumerator(enumerable.GetEnumerator());
     }
 
-    public T GetCurrentEnumerated() => enumerator!.Current;
+    public T GetCurrentEnumerated() => enumerator.Current;
 
     public IEnumerator<T> GetEnumerator() => enumerator;
 
