@@ -81,10 +81,11 @@ public class FloatSerializationTest : BaseTest<int>
 
     private MemoryStream SaveBinary(float[] array)
     {
-        var stream = new MemoryStream();
-        var formatter = new BinaryFormatter();
-        formatter.Serialize(stream, array);
-        return stream;
+        //var stream = new MemoryStream();
+        //var formatter = new BinaryFormatter();
+        //formatter.Serialize(stream, array);
+        //return stream;
+        throw new NotImplementedException();
     }
 
     private unsafe MemoryStream SaveNativeConvert(float[] array)
@@ -111,8 +112,9 @@ public class FloatSerializationTest : BaseTest<int>
 
     private float[] ReadBinary(MemoryStream memoryStream)
     {
-        var formatter = new BinaryFormatter();
-        return (float[])formatter.Deserialize(memoryStream);
+        //var formatter = new BinaryFormatter();
+        //return (float[])formatter.Deserialize(memoryStream);
+        throw new NotImplementedException();
     }
 
     private unsafe float[] ReadNativeConvert(MemoryStream memoryStream)

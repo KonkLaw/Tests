@@ -2,6 +2,7 @@
 using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Running;
 using Perfolizer.Horology;
+using TestDotNet.Tests.Database;
 using TestDotNet.Tests.SerializationTest;
 using TestDotNet.Utils;
 
@@ -9,7 +10,8 @@ using TestDotNet.Utils;
 
 ManualConfig? config = null;
 
-bool fastRun = true;
+//bool fastRun = true;
+bool fastRun = false;
 if (fastRun)
 {
     config = ManualConfig.Create(DefaultConfig.Instance)
@@ -36,7 +38,7 @@ config = (config ?? DefaultConfig.Instance)
 RunHelper.CheckEnviroment();
 RunHelper.CheckRunModeAndRequestEnter();
 
-BenchmarkRunner.Run<FloatSerializationTest>(config);
+BenchmarkRunner.Run<ArraySave>(config);
 
 
 // ========================================
