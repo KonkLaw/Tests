@@ -33,39 +33,6 @@ public class TypeCast
 {
     public BaseClass inst = new DerClass();
 
-    private static object? root;
-
-    public WeakReference<DerClass> der;
-
-    public TypeCast()
-    {
-        var derClass = new DerClass();
-        root = derClass;
-        der = new WeakReference<DerClass>(derClass);
-    }
-
-    [Benchmark]
-    public void WeakReffCall_Inline()
-    {
-        if (der.TryGetTarget(out DerClass? target))
-        {
-            target.IncrimentInlineDer();
-        }
-        else
-            throw new InvalidOperationException();
-    }
-
-    [Benchmark]
-    public void WeakReffCall_NoInline()
-    {
-        if (der.TryGetTarget(out DerClass? target))
-        {
-            target.IncrimentNoInlineDer();
-        }
-        else
-            throw new InvalidOperationException();
-    }
-
     [Benchmark]
     public void Increment_Inline()
     {

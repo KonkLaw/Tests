@@ -39,7 +39,7 @@ config = (config ?? DefaultConfig.Instance)
 RunHelper.CheckEnviroment();
 RunHelper.CheckRunModeAndRequestEnter();
 
-BenchmarkRunner.Run<TypeCast>(config);
+BenchmarkRunner.Run<OtherFastOperationsTest>(config);
 
 
 // ========================================
