@@ -3,6 +3,7 @@ using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Running;
 using Perfolizer.Horology;
 using TestDotNet.Tests;
+using TestDotNet.Tests.BranchesOptimizations;
 using TestDotNet.Tests.Database;
 using TestDotNet.Tests.SerializationTest;
 using TestDotNet.Utils;
@@ -11,8 +12,8 @@ using TestDotNet.Utils;
 
 ManualConfig? config = null;
 
-bool fastRun = true;
-//bool fastRun = false;
+//bool fastRun = true;
+bool fastRun = false;
 if (fastRun)
 {
     config = ManualConfig.Create(DefaultConfig.Instance)
@@ -39,7 +40,7 @@ config = (config ?? DefaultConfig.Instance)
 RunHelper.CheckEnviroment();
 RunHelper.CheckRunModeAndRequestEnter();
 
-BenchmarkRunner.Run<OtherFastOperationsTest>(config);
+BenchmarkRunner.Run<ComparisonTest>(config);
 
 
 // ========================================
