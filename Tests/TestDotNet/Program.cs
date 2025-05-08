@@ -3,9 +3,6 @@ using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Running;
 using Perfolizer.Horology;
 using TestDotNet.Tests;
-using TestDotNet.Tests.BranchesOptimizations;
-using TestDotNet.Tests.Database;
-using TestDotNet.Tests.SerializationTest;
 using TestDotNet.Utils;
 
 // ========================================
@@ -40,7 +37,7 @@ config = (config ?? DefaultConfig.Instance)
 RunHelper.CheckEnviroment();
 RunHelper.CheckRunModeAndRequestEnter();
 
-BenchmarkRunner.Run<ComparisonTest>(config);
+BenchmarkRunner.Run<OneCallTest>(config);
 
 
 // ========================================

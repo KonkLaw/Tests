@@ -45,8 +45,32 @@
 //DelegateFromCompiledExpression | 0.6816 ns | 0.0108 ns | 0.0090 ns |
 //  DelegateFromManualExpression | 0.6664 ns | 0.0115 ns | 0.0096 ns |
 
+
+
+
+//BenchmarkDotNet=v0.13.1, OS=Windows 10.0.26100
+//13th Gen Intel Core i5-13600K, 1 CPU, 20 logical and 14 physical cores
+//.NET SDK=9.0.203
+//  [Host]     : .NET 8.0.15 (8.0.1525.16413), X64 RyuJIT
+//  DefaultJob : .NET 8.0.15 (8.0.1525.16413), X64 RyuJIT
+//
+//|                         Method |      Mean |     Error |    StdDev |
+//|------------------------------- |----------:|----------:|----------:|
+//|                       Inlining | 0.0051 ns | 0.0021 ns | 0.0019 ns |
+//|                     NoInlining | 0.5439 ns | 0.0045 ns | 0.0042 ns |
+//|             AbstractMethodThis | 0.5666 ns | 0.0019 ns | 0.0017 ns |
+//|              InterfaceFromThis | 1.0043 ns | 0.0009 ns | 0.0007 ns |
+//|            AbstractMethodOther | 0.5999 ns | 0.0011 ns | 0.0010 ns |
+//|             InterfaceFromOther | 1.0167 ns | 0.0047 ns | 0.0044 ns |
+//|                 DelegateSimple | 0.9895 ns | 0.0011 ns | 0.0009 ns |
+//| DelegateFromCompiledExpression | 0.5640 ns | 0.0007 ns | 0.0006 ns |
+//|   DelegateFromManualExpression | 0.5725 ns | 0.0006 ns | 0.0006 ns |
+//|         DelegateFromMethodInfo | 0.9988 ns | 0.0006 ns | 0.0005 ns |
+
+
 using BenchmarkDotNet.Attributes;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using TestDotNet.Utils;
 
@@ -79,6 +103,7 @@ public class OneCallTest : BaseClass, IFakeInterface
     private Func<int, int> delegateSimple;
     private Func<int, int> delegateFromExpression;
     private Func<int, int> delegateFromManualExpression;
+    private readonly Func<int, int> delegateFromMethodInfo;
 #pragma warning restore IDE0044 // Add readonly modifier
 
     public OneCallTest()
@@ -92,6 +117,10 @@ public class OneCallTest : BaseClass, IFakeInterface
         ParameterExpression parameter1 = Expression.Parameter(typeof(int), "parameter1");
         Expression sumExpr = Expression.Add(parameter1, Expression.Constant(1));
         delegateFromManualExpression = Expression.Lambda<Func<int, int>>(sumExpr, parameter1).Compile();
+
+        var obj = new FakeClass();
+        MethodInfo methodInfo = typeof(FakeClass).GetMethod(nameof(InterfaceMethod), BindingFlags.Instance | BindingFlags.Public)!;
+        delegateFromMethodInfo = (Func<int, int>)Delegate.CreateDelegate(typeof(Func<int, int>), obj, methodInfo);
     }
 
     [Benchmark]
@@ -148,6 +177,11 @@ public class OneCallTest : BaseClass, IFakeInterface
         return delegateFromManualExpression(48);
     }
 
+    [Benchmark]
+    public int DelegateFromMethodInfo()
+    {
+        return delegateFromMethodInfo(48);
+    }
 
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
