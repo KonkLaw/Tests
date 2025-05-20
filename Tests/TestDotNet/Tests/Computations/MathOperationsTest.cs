@@ -12,7 +12,7 @@
 using BenchmarkDotNet.Attributes;
 using TestDotNet.Utils;
 
-namespace TestDotNet.Tests;
+namespace TestDotNet.Tests.Computations;
 
 public class MathOperationsTest
 {
