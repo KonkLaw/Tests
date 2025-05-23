@@ -9,10 +9,11 @@
 //|           Tan | 47.7281 ns | 0.1239 ns | 0.1034 ns |
 //| MultiplyFloat |  0.0597 ns | 0.0021 ns | 0.0019 ns |
 //|      AddFloat |  0.0669 ns | 0.0171 ns | 0.0151 ns |
+
 using BenchmarkDotNet.Attributes;
 using TestDotNet.Utils;
 
-namespace TestDotNet.Tests.Computations;
+namespace TestDotNet.Tests.NumericTests;
 
 public class MathOperationsTest
 {

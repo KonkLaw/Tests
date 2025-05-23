@@ -119,9 +119,9 @@ class MatrixComputationTest
 		{
 			Matrix4F.Invert(matrix, out Matrix4F result);
 			if (i % 2 == 0)
-				result -= new Matrix4F(RandomHelper.GetFloat(0.1f, 0.01f));
+				result -= new Matrix4F(RandomHelper.GetFloat(min: 0.01f, max: 0.1f));
 			else
-				result += new Matrix4F(RandomHelper.GetFloat(0.1f, 0.01f));
+				result += new Matrix4F(RandomHelper.GetFloat(min: 0.01f, max: 0.1f));
 			matrix = result;
 		}
 		return matrix;

@@ -1,7 +1,7 @@
 ﻿using BenchmarkDotNet.Attributes;
 using TestDotNet.Utils;
 
-namespace TestDotNet.Tests.Computations;
+namespace TestDotNet.Tests.NumericTests;
 
 public class OperationTests
 {

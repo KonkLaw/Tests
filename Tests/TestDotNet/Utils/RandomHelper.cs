@@ -6,21 +6,21 @@ class RandomHelper
 
     public static float GetFloat() => Random.NextSingle();
 
-    public static float GetFloat(float max = 1.0f, float min = 0f)
+    public static float GetFloat(float min, float max)
         => min + Random.NextSingle() * (max - min);
 
-    public static float[] GetFloatNumbers(int numbersCount, float max = 1f, float min = 0)
+    public static float[] GetFloatNumbers(int numbersCount, float min = 0, float max = 1f)
     {
         var result = new float[numbersCount];
         for (int i = 0; i < result.Length; i++)
         {
-	        result[i] = GetFloat(max, min);
+	        result[i] = GetFloat(min: min, max: max);
         }
         return result;
     }
 
     public static Vector3F GetVector(float max, float min)
-        => new Vector3F(GetFloat(max, min), GetFloat(max, min), GetFloat(max, min));
+        => new Vector3F(GetFloat(min: min, max: max), GetFloat(min: min, max: max), GetFloat(min: min, max: max));
 
     public static Vector3F[] GetVectors(int count, float max, float min)
     {
@@ -36,8 +36,8 @@ class RandomHelper
         for (int i = 0; i < count; i++)
         {
             vectors[i] = new Vector2F(
-                GetFloat(max, min),
-                GetFloat(max, min));
+                GetFloat(min: min, max: max),
+                GetFloat(min: min, max: max));
         }
         return vectors;
     }
