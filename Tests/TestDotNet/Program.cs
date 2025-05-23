@@ -4,6 +4,7 @@ using BenchmarkDotNet.Running;
 using Perfolizer.Horology;
 using TestDotNet.Tests;
 using TestDotNet.Tests.Memory;
+using TestDotNet.Tests.NumericTests;
 using TestDotNet.Utils;
 
 // ========================================
@@ -38,7 +39,7 @@ config = (config ?? DefaultConfig.Instance)
 RunHelper.CheckEnviroment();
 RunHelper.CheckRunModeAndRequestEnter();
 
-BenchmarkRunner.Run<AllocationTest>(config);
+BenchmarkRunner.Run<ConversionTests>(config);
 
 
 // ========================================
