@@ -2,9 +2,7 @@
 using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Running;
 using Perfolizer.Horology;
-using TestDotNet.Tests;
-using TestDotNet.Tests.Memory;
-using TestDotNet.Tests.NumericTests;
+using TestDotNet.Tests.BranchesOptimizations;
 using TestDotNet.Utils;
 
 // ========================================
@@ -39,7 +37,7 @@ config = (config ?? DefaultConfig.Instance)
 RunHelper.CheckEnviroment();
 RunHelper.CheckRunModeAndRequestEnter();
 
-BenchmarkRunner.Run<ConversionTests>(config);
+BenchmarkRunner.Run<BorderOfRangeSplitting>(config);
 
 
 // ========================================
